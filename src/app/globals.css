@@ -1,26 +1,42 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* Verde principal */
+--spotify-green: #1DB954;
+--spotify-green-hover: #1ed760; /* para botones al pasar el mouse */
+
+/* Fondo principal */
+--spotify-black-dark: #121212;
+--spotify-black: #191919; /* ligeramente más claro para secciones */
+--spotify-black: #212121;
+
+/* Gris para textos y elementos secundarios */
+--spotify-gray-dark: #535353;
+--spotify-gray: #666666; /* texto secundario */
+--spotify-gray: #B3B3B3; /* texto normal */
+--spotify-gray-light: #E0E0E0; /* para iconos o placeholders */
+
+/* Barra lateral y botones */
+--spotify-sidebar-hover: #282828; /* hover sobre botones de la barra lateral */
+--spotify-sidebar-active: #333333; /* botón activo en la barra lateral */
+--spotify-button-text: #FFFFFF; /* texto de botones */
+
+/* Bordes / separadores */
+--spotify-border: #282828;
+
+/* Texto principal */
+--spotify-text-primary: #FFFFFF;
+--spotify-text-secondary: #B3B3B3;
+--spotify-text-tertiary: #535353;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
 
 body {
-  background: var(--background);
-  color: var(--foreground);
+  background: var(--spotify-black);
+  color: var(--spotify-gray);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+main {
+  height: calc(100vh - 60px); /* Ajusta según la altura del header */
 }
