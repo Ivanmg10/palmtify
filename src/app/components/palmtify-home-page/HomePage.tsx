@@ -1,21 +1,22 @@
 import {
-  getAlbumsByArtist,
+  // getAlbumsByArtist,
   getArtist,
-  getTracksByAlbum,
+  // getTracksByAlbum,
 } from "@/app/utils/apliClient";
 import Image from "next/image";
+import HomePageSliders from "../home-page-sliders/HomePageSliders";
 
-async function handleSearch(name: string) {
-  const artist = await getArtist(name);
-  if (!artist) return;
+// async function handleSearch(name: string) {
+//   const artist = await getArtist(name);
+//   if (!artist) return;
 
-  const albums = await getAlbumsByArtist(artist.idArtist);
-  const tracks =
-    albums.length > 0 ? await getTracksByAlbum(albums[0].idAlbum) : [];
+//   const albums = await getAlbumsByArtist(artist.idArtist);
+//   const tracks =
+//     albums.length > 0 ? await getTracksByAlbum(albums[0].idAlbum) : [];
 
-  console.log(artist);
-  return { artist, albums, tracks };
-}
+//   console.log(artist);
+//   return { artist, albums, tracks };
+// }
 
 export default async function HomePage() {
   const someBands = [
@@ -29,7 +30,6 @@ export default async function HomePage() {
     "The Rolling Stones",
   ];
 
-  // Espera a que todas las búsquedas terminen
   const bandsData = await Promise.all(
     someBands.map(async (band) => {
       const artist = await getArtist(band);
@@ -38,36 +38,42 @@ export default async function HomePage() {
   );
 
   return (
-    <div className="w-full p-4 bg-[#181818] rounded-lg flex flex-wrap gap-4">
-      <div className="w-full mb-4 flex justify-start items-center flex-wrap gap-5">
+    <div className="w-full p-4 pl-12 pr-12 bg-[#181818] rounded-lg flex flex-col items-center">
+      <div className="flex flex-row justify-start gap-2 mt-4 w-full h-[3vh]">
+        <button className="bg-[#212121] text-white rounded-full pl-5 pr-5 hover:bg-[#282828] transition duration-300">
+          All
+        </button>
+
+        <button className="bg-[#212121] text-white  rounded-full pl-5 pr-5 hover:bg-[#282828] transition duration-300">
+          Music
+        </button>
+
+        <button className="bg-[#212121] text-white rounded-full pl-5 pr-5  hover:bg-[#282828] transition duration-300">
+          Podcasts
+        </button>
+      </div>
+
+      <div className="w-full mb-4 grid-cols-4 gap-4 grid justify-items-center mt-8">
         {bandsData.map(({ band, artist }) => (
           <div
             key={band}
-            className="max-w-sm rounded overflow-hidden shadow-lg bg-[#212121] text-[#FFFFFF] mb-4 hover:scale-103 transition-transform duration-300"
+            className="rounded overflow-hidden shadow-lg bg-[#212121] text-[#FFFFFF] mb-2 hover:scale-103 transition-transform duration-300 flex w-full h-24"
           >
             <Image
-              className="w-full"
+              className="object-cover"
               src={artist?.strArtistThumb || "/placeholder.png"}
               alt={artist?.strArtist || band}
-              width={400}
-              height={225}
+              width={100}
+              height={100}
             />
-            <div className="px-6 py-4">
+            <div className="px-6 py-4 grow">
               <div className="font-bold text-xl mb-2">{artist?.strArtist}</div>
-              <p className="text-base">
-                {artist?.strGenre} - Formed in {artist?.intFormedYear}
-              </p>
             </div>
-            {artist?.strGenre && (
-              <div className="px-6 pt-4 pb-2">
-                <span className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">
-                  {`#${artist.strGenre.replace(/\s+/g, "").toLowerCase()}`}
-                </span>
-              </div>
-            )}
           </div>
         ))}
       </div>
+
+      <HomePageSliders />
     </div>
   );
 }

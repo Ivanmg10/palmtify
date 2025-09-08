@@ -1,92 +1,105 @@
-import { IconSearch, IconList } from "@tabler/icons-react";
-import Image from "next/image";
+"use client";
+
+import { useEffect, useRef, useState } from "react";
 import Nirvana from "../../../../public/nirvana.jpg";
+import LateralComponentCards from "../lateral-component-cards/LateralComponentCards";
+import LateralComponentTop from "../lateral-component-top/LateralComponentTop";
+import { useMeasure } from "react-use";
 
 const playlists = [
   {
-    id: 1,
-    title: "Nirvana",
+    id: "1",
+    tittle: "Nirvana",
     description: "Playlist Ivan",
     image: Nirvana,
   },
   {
-    id: 2,
-    title: "Nirvana",
+    id: "2",
+    tittle: "Nirvana",
     description: "Playlist Ivan",
     image: Nirvana,
   },
   {
-    id: 3,
-    title: "Nirvana",
+    id: "3",
+    tittle: "Nirvana",
     description: "Playlist Ivan",
     image: Nirvana,
   },
   {
-    id: 4,
-    title: "Nirvana",
+    id: "4",
+    tittle: "Nirvana",
     description: "Playlist Ivan",
     image: Nirvana,
   },
 ];
 
 export default function PalmtifyLateralLibrary() {
+  const [ref, { width }] = useMeasure<HTMLDivElement>();
+  const isSmall = width < 180;
+
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [isDragging, setIsDragging] = useState(false);
+
+  // Guardar la posición inicial del mouse y ancho
+  const dragStartX = useRef(0);
+  const startWidth = useRef(0);
+
+  const handleMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
+    setIsDragging(true);
+    dragStartX.current = e.clientX;
+    startWidth.current = containerRef.current?.offsetWidth || 0;
+
+    // Prevenir selección de texto
+    e.preventDefault();
+  };
+
+  const handleMouseMove = (e: MouseEvent) => {
+    if (!isDragging) return;
+    const delta = e.clientX - dragStartX.current;
+    if (containerRef.current) {
+      const newWidth = Math.max(200, startWidth.current + delta); // ancho mínimo 200px
+      containerRef.current.style.width = `${newWidth}px`;
+    }
+  };
+
+  const handleMouseUp = () => {
+    setIsDragging(false);
+  };
+
+  useEffect(() => {
+    if (isDragging) {
+      window.addEventListener("mousemove", handleMouseMove);
+      window.addEventListener("mouseup", handleMouseUp);
+    } else {
+      window.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener("mouseup", handleMouseUp);
+    }
+
+    return () => {
+      window.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener("mouseup", handleMouseUp);
+    };
+  }, [isDragging]);
+
   return (
-    <div className="w-[15%] bg-[#191919] rounded-lg p-5">
+    <div
+      ref={(node: HTMLDivElement) => {
+        ref(node);
+        containerRef.current = node;
+      }}
+      className="relative overflow-auto rounded-lg p-5 bg-[#181818] max-w-[400px]"
+    >
       <div>
-        <div className="flex flex-row items-center justify-around ">
-          <h1 className="text-lg font-semibold w-[60%]">Your Library</h1>
-          <button className="bg-[#212121] text-white px-4 py-2 rounded-full w-[35%] hover:bg-[#282828] transition duration-300">
-            Create
-          </button>
-        </div>
-
-        <div className="flex flex-row justify-start gap-2 mt-4">
-          <button className="bg-[#212121] text-white p-1 rounded-full w-[35%] hover:bg-[#282828] transition duration-300">
-            Playlists
-          </button>
-
-          <button className="bg-[#212121] text-white p-1 rounded-full w-[35%] hover:bg-[#282828] transition duration-300">
-            Albums
-          </button>
-
-          <button className="bg-[#212121] text-white p-1 rounded-full w-[35%] hover:bg-[#282828] transition duration-300">
-            Artists
-          </button>
-        </div>
-
-        <div className="mt-4 flex justify-between w-full p-1">
-          <IconSearch
-            stroke={2}
-            size={20}
-            className="text-[#B3B3B3] cursor-pointer hover:text-white hover:scale-110 transition-transform duration-300"
-          />
-          <div className="flex gap-3 bg-transparent outline-none placeholder-[#B3B3B3] text-sm text-[#B3B3B3] cursor-pointer hover:text-white hover:scale-105 transition-transform duration-300">
-            <p className="">Recents</p>
-            <IconList stroke={2} size={20} className="" />
-          </div>
-        </div>
-
-        <div className="mt-4 flex flex-col gap-2">
-          {playlists.map((playlist) => (
-            <div
-              key={playlist.id}
-              className="bg-[#212121] text-white p-4 rounded-lg flex gap-3 cursor-pointer hover:bg-[#282828] transition duration-300 items-center"
-            >
-              <Image
-                key={playlist.id}
-                src={playlist.image}
-                alt={playlist.title}
-                width={50}
-                height={50}
-              />
-              <div>
-                <p>{playlist.title}</p>
-                <p className="text-sm text-[#B3B3B3]">{playlist.description}</p>
-              </div>
-            </div>
-          ))}
-        </div>
+        <LateralComponentTop isSmall={isSmall} />
+        <LateralComponentCards playlists={playlists} isSmall={isSmall} />
       </div>
+
+      {/* Handle para redimensionar */}
+      <div
+        title="Drag to resize"
+        onMouseDown={handleMouseDown}
+        className="pointer-events-auto absolute h-full top-0 right-0 w-1.5 cursor-ew-resize rounded-full bg-slate-950/20 group-data-dragging:bg-slate-950/40 hover:bg-slate-300/40 hover:transition duration-300"
+      />
     </div>
   );
 }

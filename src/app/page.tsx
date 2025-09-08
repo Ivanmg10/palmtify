@@ -9,10 +9,8 @@ export default function Home() {
 
       <main className="p-4 grid cols-2 gap-4 bg-[#121212]">
         <div className="flex gap-2">
-          {/* Sección izquierda - Libreria - 30% */}
           <PalmtifyLateralLibrary />
 
-          {/* Sección derecha - Home Page - 70% */}
           <HomePage />
         </div>
       </main>
