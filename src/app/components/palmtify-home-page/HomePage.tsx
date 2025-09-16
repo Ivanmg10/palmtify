@@ -73,7 +73,11 @@ export default async function HomePage() {
         ))}
       </div>
 
-      <HomePageSliders />
+      <HomePageSliders tittle={"You"} subtittle={"Made for"} />
+
+      <HomePageSliders tittle={"Recently played"} subtittle={null} />
+
+      <HomePageSliders tittle={"Jump back in"} subtittle={null} />
     </div>
   );
 }

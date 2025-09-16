@@ -87,7 +87,7 @@ export default function PalmtifyLateralLibrary() {
         ref(node);
         containerRef.current = node;
       }}
-      className="relative overflow-auto rounded-lg p-5 bg-[#181818] max-w-[400px]"
+      className="relative overflow-auto rounded-lg p-5 bg-[#181818] w-[400px] max-w-[400px]"
     >
       <div>
         <LateralComponentTop isSmall={isSmall} />

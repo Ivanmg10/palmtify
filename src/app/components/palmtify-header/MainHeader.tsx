@@ -11,7 +11,7 @@ import {
 
 export default function PalmtifyHeader() {
   return (
-    <nav className="flex items-center justify-between w-full px-4 py-3 bg-[#121212] text-white">
+    <nav className="flex items-center justify-between w-full px-4 pt-4 bg-[#121212] text-white">
       {/* Left section */}
       <div className="flex items-center gap-3">
         <button className="p-2 rounded-full bg-[#212121] hover:bg-[#2a2a2a]">
@@ -27,7 +27,7 @@ export default function PalmtifyHeader() {
 
       {/* Center section */}
       <div className="flex items-center gap-3 w-1/4">
-        <div className="w-10 aspect-square flex items-center justify-center rounded-full bg-[#212121]">
+        <div className="w-11 aspect-square flex items-center justify-center rounded-full bg-[#212121]">
           <IconHomeFilled
             stroke={2}
             size={20}
@@ -39,7 +39,7 @@ export default function PalmtifyHeader() {
           <input
             type="text"
             placeholder="Buscar"
-            className="w-full ml-2 bg-transparent outline-none placeholder-gray-400 text-sm"
+            className="w-full ml-2 bg-transparent outline-none placeholder-gray-400 text-sm p-1"
           />
           <IconLibrary stroke={2} size={20} className="text-gray-400" />
         </div>

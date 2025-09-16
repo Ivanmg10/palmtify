@@ -1,0 +1,8 @@
+.albums-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.albums-scroll {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
