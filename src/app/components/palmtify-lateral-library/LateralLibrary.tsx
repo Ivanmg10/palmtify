@@ -5,35 +5,11 @@ import Nirvana from "../../../../public/nirvana.jpg";
 import LateralComponentCards from "../lateral-component-cards/LateralComponentCards";
 import LateralComponentTop from "../lateral-component-top/LateralComponentTop";
 import { useMeasure } from "react-use";
+import { PalmtifyLateralLibraryProps } from "@/types";
 
-const playlists = [
-  {
-    id: "1",
-    tittle: "Nirvana",
-    description: "Playlist Ivan",
-    image: Nirvana,
-  },
-  {
-    id: "2",
-    tittle: "Nirvana",
-    description: "Playlist Ivan",
-    image: Nirvana,
-  },
-  {
-    id: "3",
-    tittle: "Nirvana",
-    description: "Playlist Ivan",
-    image: Nirvana,
-  },
-  {
-    id: "4",
-    tittle: "Nirvana",
-    description: "Playlist Ivan",
-    image: Nirvana,
-  },
-];
-
-export default function PalmtifyLateralLibrary() {
+export default function PalmtifyLateralLibrary({
+  recentlyPlayedArray,
+}: PalmtifyLateralLibraryProps) {
   const [ref, { width }] = useMeasure<HTMLDivElement>();
   const isSmall = width < 180;
 
@@ -87,11 +63,14 @@ export default function PalmtifyLateralLibrary() {
         ref(node);
         containerRef.current = node;
       }}
-      className="relative overflow-auto rounded-lg p-5 bg-[#181818] w-[400px] max-w-[400px]"
+      className="relative overflow-auto rounded-lg bg-[#181818] w-[400px] max-w-[400px]"
     >
       <div>
         <LateralComponentTop isSmall={isSmall} />
-        <LateralComponentCards playlists={playlists} isSmall={isSmall} />
+        <LateralComponentCards
+          isSmall={isSmall}
+          recentlyPlayedArray={recentlyPlayedArray}
+        />
       </div>
 
       {/* Handle para redimensionar */}

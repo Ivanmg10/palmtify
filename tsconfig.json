@@ -27,7 +27,7 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "src/app/components/home-page-sliders/HomePageSliders.jsx"
+    "src/app/components/home-page-sliders/HomePageSliders.tsx"
   ],
   "exclude": ["node_modules"]
 }

@@ -1,51 +1,69 @@
-export type Artist = {
-  idArtist: string;
-  strArtist: string;
-  strGenre: string;
-  intFormedYear: string;
-  strArtistThumb: string;
-};
-
-export type Album = {
-  idAlbum: string;
-  strAlbum: string;
-  intYearReleased: string;
-};
+import { Album, Artist } from "@/types";
 
 export type Track = {
   idTrack: string;
   strTrack: string;
 };
 
-// Función para buscar artista por nombre
+// Función genérica de fetch para la API
+async function fetchFromAPI<T>(endpoint: string): Promise<T | null> {
+  try {
+    const res = await fetch(endpoint, { next: { revalidate: 60 } });
+
+    if (!res.ok) {
+      console.error(`Error fetching ${endpoint}: ${res.status}`);
+      return null;
+    }
+
+    const data = await res.json();
+    return data as T;
+  } catch (error) {
+    console.error(`Fetch failed for ${endpoint}:`, error);
+    return null;
+  }
+}
+
+// Funciones específicas usando la genérica
+
 export async function getArtist(name: string): Promise<Artist | null> {
-  const res = await fetch(
+  const data = await fetchFromAPI<{ artists?: Artist[] }>(
     `https://theaudiodb.com/api/v1/json/123/search.php?s=${encodeURIComponent(
       name
     )}`
   );
-  const data = await res.json();
-  return data.artists ? data.artists[0] : null;
+
+  return data?.artists?.[0] ?? null;
 }
 
-// Función para obtener álbumes por ID de artista
 export async function getAlbumsByArtist(id: string): Promise<Album[]> {
-  const res = await fetch(
-    `https://theaudiodb.com/api/v1/json/123/album.php?i=${encodeURIComponent(
+  const data = await fetchFromAPI<{ album?: Album[] }>(
+    `https://www.theaudiodb.com/api/v1/json/123/searchalbum.php?s=${encodeURIComponent(
       id
     )}`
   );
-  const data = await res.json();
-  return data.album ?? [];
+
+  return Array.isArray(data?.album) ? data.album : [];
 }
 
-// Función para obtener canciones por ID de álbum
+export async function getAlbumsByArtistAndAlbum(
+  id: string,
+  album: string
+): Promise<Album[]> {
+  const data = await fetchFromAPI<{ album?: Album[] }>(
+    `https://www.theaudiodb.com/api/v1/json/123/searchalbum.php?s=${encodeURIComponent(
+      id
+    )}&a=${encodeURIComponent(album)}`
+  );
+
+  return Array.isArray(data?.album) ? data.album : [];
+}
+
 export async function getTracksByAlbum(id: string): Promise<Track[]> {
-  const res = await fetch(
+  const data = await fetchFromAPI<{ track?: Track[] }>(
     `https://theaudiodb.com/api/v1/json/123/track.php?m=${encodeURIComponent(
       id
     )}`
   );
-  const data = await res.json();
-  return data.track ?? [];
+
+  return Array.isArray(data?.track) ? data.track : [];
 }

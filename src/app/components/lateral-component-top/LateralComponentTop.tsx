@@ -6,9 +6,9 @@ export default function LateralComponentCards({
   isSmall: boolean;
 }) {
   return (
-    <>
+    <div className="p-5">
       {!isSmall ? (
-        <div className="flex flex-row items-center justify-around ">
+        <div className="flex flex-row items-center justify-around pb-2">
           <h1 className="text-lg font-semibold w-[60%]">Your Library</h1>
           <button className="bg-[#212121] text-white px-4 py-2 rounded-full w-[35%] hover:bg-[#282828] transition duration-300">
             Create
@@ -23,7 +23,7 @@ export default function LateralComponentCards({
       )}
 
       {!isSmall && (
-        <div className="flex flex-row justify-start gap-2 mt-4">
+        <div className="flex flex-row justify-start gap-2 py-3">
           <button className="bg-[#212121] text-white p-1 rounded-full w-[35%] hover:bg-[#282828] transition duration-300">
             Playlists
           </button>
@@ -39,7 +39,7 @@ export default function LateralComponentCards({
       )}
 
       {!isSmall && (
-        <div className="mt-4 flex justify-between w-full p-1">
+        <div className="flex justify-between w-full py-3">
           <IconSearch
             stroke={2}
             size={20}
@@ -51,6 +51,6 @@ export default function LateralComponentCards({
           </div>
         </div>
       )}
-    </>
+    </div>
   );
 }

@@ -36,10 +36,6 @@ export default async function HomePageSliders({
       )
     : [];
 
-  bandsData.map((band) => {
-    console.log(band);
-  });
-
   return (
     <div className="w-full flex flex-col justify-start items-start mt-8 mb-4 relative">
       <p className="text-white">{subtitle}</p>

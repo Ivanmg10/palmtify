@@ -1,15 +1,34 @@
 import PalmtifyHeader from "./components/palmtify-header/MainHeader";
 import HomePage from "./components/palmtify-home-page/HomePage";
 import PalmtifyLateralLibrary from "./components/palmtify-lateral-library/LateralLibrary";
+import { recentlyPlayed } from "./constants/albums";
+import { getAlbumsByArtistAndAlbum } from "./utils/apliClient";
 
-export default function Home() {
+export default async function Home() {
+  const recentlyPlayedArray = recentlyPlayed
+    ? await Promise.all(
+        recentlyPlayed.map(async (band) => {
+          const album = await getAlbumsByArtistAndAlbum(
+            band.artist,
+            band.album
+          );
+          return {
+            id: band.id,
+            artist: band.artist,
+            albumName: band.album,
+            album,
+          };
+        })
+      )
+    : [];
+
   return (
-    <div className="min-h-screen bg-[#121212] text-white">
+    <div className="min-h-screen">
       <PalmtifyHeader />
 
-      <main className="p-4 grid cols-2 gap-4 bg-[#121212]">
+      <main className="p-4 grid cols-2 gap-4">
         <div className="flex gap-2">
-          <PalmtifyLateralLibrary />
+          <PalmtifyLateralLibrary recentlyPlayedArray={recentlyPlayedArray} />
 
           <HomePage />
         </div>

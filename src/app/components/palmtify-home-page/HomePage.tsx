@@ -1,35 +1,16 @@
-import {
-  // getAlbumsByArtist,
-  getArtist,
-  // getTracksByAlbum,
-} from "@/app/utils/apliClient";
+import { getArtist } from "@/app/utils/apliClient";
 import Image from "next/image";
 import HomePageSliders from "../home-page-sliders/HomePageSliders";
-
-// async function handleSearch(name: string) {
-//   const artist = await getArtist(name);
-//   if (!artist) return;
-
-//   const albums = await getAlbumsByArtist(artist.idArtist);
-//   const tracks =
-//     albums.length > 0 ? await getTracksByAlbum(albums[0].idAlbum) : [];
-
-//   console.log(artist);
-//   return { artist, albums, tracks };
-// }
+import {
+  hipHop90s,
+  jumpBackIn,
+  madeForYou,
+  recentlyPlayed,
+  someBands,
+} from "@/app/constants/albums";
+import HomePageTopSection from "../home-page-top-section/HomePageTopSection";
 
 export default async function HomePage() {
-  const someBands = [
-    "Nirvana",
-    "Metallica",
-    "Pink Floyd",
-    "Judas Priest",
-    "Queen",
-    "The Beatles",
-    "Led Zeppelin",
-    "The Rolling Stones",
-  ];
-
   const bandsData = await Promise.all(
     someBands.map(async (band) => {
       const artist = await getArtist(band);
@@ -53,31 +34,38 @@ export default async function HomePage() {
         </button>
       </div>
 
-      <div className="w-full mb-4 grid-cols-4 gap-4 grid justify-items-center mt-8">
-        {bandsData.map(({ band, artist }) => (
-          <div
-            key={band}
-            className="rounded overflow-hidden shadow-lg bg-[#212121] text-[#FFFFFF] mb-2 hover:scale-103 transition-transform duration-300 flex w-full h-24"
-          >
-            <Image
-              className="object-cover"
-              src={artist?.strArtistThumb || "/placeholder.png"}
-              alt={artist?.strArtist || band}
-              width={100}
-              height={100}
-            />
-            <div className="px-6 py-4 grow">
-              <div className="font-bold text-xl mb-2">{artist?.strArtist}</div>
-            </div>
-          </div>
-        ))}
-      </div>
+      <HomePageTopSection bandsData={bandsData} />
 
-      <HomePageSliders tittle={"You"} subtittle={"Made for"} />
+      <HomePageSliders
+        title={"You"}
+        subtitle={"Made for"}
+        albums={madeForYou}
+      />
 
-      <HomePageSliders tittle={"Recently played"} subtittle={null} />
+      <HomePageSliders
+        title={"Recently played"}
+        subtitle={""}
+        albums={recentlyPlayed}
+      />
 
-      <HomePageSliders tittle={"Jump back in"} subtittle={null} />
+      <HomePageSliders
+        title={"Jump back in"}
+        subtitle={""}
+        albums={jumpBackIn}
+      />
+
+      <HomePageSliders
+        title={"Your favorite artist"}
+        subtitle={""}
+        albums={jumpBackIn}
+        bandsData={bandsData}
+      />
+
+      <HomePageSliders
+        title={"Hip Hop 90's"}
+        subtitle={""}
+        albums={hipHop90s}
+      />
     </div>
   );
 }
