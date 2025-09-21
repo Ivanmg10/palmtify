@@ -19,21 +19,7 @@ export default async function HomePage() {
   );
 
   return (
-    <div className="w-full p-4 pl-12 pr-12 bg-[#181818] rounded-lg flex flex-col items-center">
-      <div className="flex flex-row justify-start gap-2 mt-4 w-full h-[3vh]">
-        <button className="bg-[#212121] text-white rounded-full pl-5 pr-5 hover:bg-[#282828] transition duration-300">
-          All
-        </button>
-
-        <button className="bg-[#212121] text-white  rounded-full pl-5 pr-5 hover:bg-[#282828] transition duration-300">
-          Music
-        </button>
-
-        <button className="bg-[#212121] text-white rounded-full pl-5 pr-5  hover:bg-[#282828] transition duration-300">
-          Podcasts
-        </button>
-      </div>
-
+    <div className="p-4 pl-12 pr-12 bg-[#181818] rounded-lg flex flex-col items-center overflow-x-hidden">
       <HomePageTopSection bandsData={bandsData} />
 
       <HomePageSliders

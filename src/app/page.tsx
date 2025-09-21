@@ -26,12 +26,10 @@ export default async function Home() {
     <div className="min-h-screen">
       <PalmtifyHeader />
 
-      <main className="p-4 grid cols-2 gap-4">
-        <div className="flex gap-2">
-          <PalmtifyLateralLibrary recentlyPlayedArray={recentlyPlayedArray} />
+      <main className="p-4 grid grid-cols-[400px_1fr] gap-4">
+        <PalmtifyLateralLibrary recentlyPlayedArray={recentlyPlayedArray} />
 
-          <HomePage />
-        </div>
+        <HomePage />
       </main>
     </div>
   );
