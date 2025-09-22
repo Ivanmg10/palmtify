@@ -1,4 +1,4 @@
-import { getArtist } from "@/app/utils/apliClient";
+import { getArtist, getTracksByAlbum } from "@/app/utils/apliClient";
 import Image from "next/image";
 import HomePageSliders from "../home-page-sliders/HomePageSliders";
 import {

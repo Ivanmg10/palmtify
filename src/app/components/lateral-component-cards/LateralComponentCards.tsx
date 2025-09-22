@@ -1,5 +1,6 @@
 import { RecentlyPlayedItem } from "@/types";
 import Image, { StaticImageData } from "next/image";
+import Link from "next/link";
 
 type Playlist = {
   id: string;
@@ -19,9 +20,10 @@ export default function LateralComponentCards({
     <div className="p-2 flex flex-col gap-2">
       {isSmall
         ? recentlyPlayedArray.map((playlist) => (
-            <div
+            <Link
               key={playlist.album[0].idAlbum}
               className="text-white p-2 rounded-lg flex gap-3 cursor-pointer hover:bg-[#282828] transition duration-300 items-center justify-center"
+              href={`/albums/${playlist.album[0].idAlbum}`}
             >
               <Image
                 key={playlist.id}
@@ -30,12 +32,13 @@ export default function LateralComponentCards({
                 width={150}
                 height={150}
               />
-            </div>
+            </Link>
           ))
         : recentlyPlayedArray.map((playlist) => (
-            <div
+            <Link
               key={playlist.album[0].idAlbum}
               className="text-white p-2 rounded-lg flex gap-3 cursor-pointer hover:bg-[#282828] transition duration-300 items-center"
+              href={`/albums/${playlist.album[0].idAlbum}`}
             >
               <Image
                 key={playlist.id}
@@ -51,7 +54,7 @@ export default function LateralComponentCards({
                   Album • {playlist.artist}
                 </p>
               </div>
-            </div>
+            </Link>
           ))}
     </div>
   );

@@ -1,7 +1,11 @@
-import { getAlbumsByArtistAndAlbum } from "@/app/utils/apliClient";
+import {
+  getAlbumsByArtistAndAlbum,
+  getTracksByAlbum,
+} from "@/app/utils/apliClient";
 import Image from "next/image";
 import "./style.css";
 import { BandData } from "@/types";
+import Link from "next/link";
 
 interface Albums {
   id: number;
@@ -41,12 +45,12 @@ export default async function HomePageSliders({
       <p className="text-white">{subtitle}</p>
       <h1 className="text-white text-2xl font-bold">{title}</h1>
 
-      <div className="flex flex-row flex-nowrap overflow-x-auto justify-around albums-scroll">
+      <div className="flex flex-row flex-nowrap overflow-x-auto justify-around albums-scroll w-full">
         {isArtist
           ? bandsData &&
             bandsData?.map((band) => (
               <div
-                className="mt-4 hover:bg-[#282828] transition duration-300 p-3 rounded-lg cursor-pointer flex-shrink-0"
+                className="mt-4 hover:bg-[#282828] transition duration-300 p-3 rounded-lg cursor-pointer flex-shrink-0 "
                 key={band.band}
               >
                 <Image
@@ -62,9 +66,10 @@ export default async function HomePageSliders({
               </div>
             ))
           : albumsData.map((album) => (
-              <div
+              <Link
                 className="mt-4 hover:bg-[#282828] transition duration-300 p-3 rounded-lg cursor-pointer flex-shrink-0"
                 key={album?.album[0]?.idAlbum}
+                href={`/albums/${album?.album[0]?.idAlbum}`}
               >
                 <Image
                   className={"rounded-lg"}
@@ -75,12 +80,12 @@ export default async function HomePageSliders({
                 />
 
                 <p className="mt-3 text-white">{album?.album[0]?.strAlbum}</p>
-              </div>
+              </Link>
             ))}
 
-        {albums && !isArtist && (
+        {/* {albums && !isArtist && (
           <div className="pointer-events-none absolute mt-7 right-0 w-48 bg-gradient-to-l from-black/80 to-transparent h-[200px]"></div>
-        )}
+        )} */}
       </div>
     </div>
   );

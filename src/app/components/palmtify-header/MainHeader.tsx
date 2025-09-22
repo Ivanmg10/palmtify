@@ -8,6 +8,7 @@ import {
   IconBell,
   IconUser,
 } from "@tabler/icons-react";
+import Link from "next/link";
 
 export default function PalmtifyHeader() {
   return (
@@ -27,13 +28,16 @@ export default function PalmtifyHeader() {
 
       {/* Center section */}
       <div className="flex items-center gap-3 w-1/4">
-        <div className="w-11 aspect-square flex items-center justify-center rounded-full bg-[#212121]">
+        <Link
+          className="w-11 aspect-square flex items-center justify-center rounded-full bg-[#212121]"
+          href="/"
+        >
           <IconHomeFilled
             stroke={2}
             size={20}
             className="cursor-pointer hover:text-[#1DB954] "
           />
-        </div>
+        </Link>
         <div className="flex items-center w-full px-3 py-2 bg-[#212121] rounded-full">
           <IconSearch stroke={2} size={20} className="text-gray-400" />
           <input

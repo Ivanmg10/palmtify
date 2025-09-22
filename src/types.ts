@@ -13,6 +13,7 @@ export interface Album {
   strAlbum: string;
   strAlbumThumb: string;
   intYearReleased: string | null;
+  strYear: string;
 }
 
 // export interface Track {

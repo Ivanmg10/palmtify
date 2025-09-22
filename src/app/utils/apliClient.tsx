@@ -3,6 +3,12 @@ import { Album, Artist } from "@/types";
 export type Track = {
   idTrack: string;
   strTrack: string;
+  idArtist: string;
+  strArtist: string;
+  idAlbum: string;
+  strAlbum: string;
+  intDuration: number;
+  strTrackThumb: string;
 };
 
 // Función genérica de fetch para la API
@@ -35,9 +41,29 @@ export async function getArtist(name: string): Promise<Artist | null> {
   return data?.artists?.[0] ?? null;
 }
 
+export async function getArtistById(id: string): Promise<Artist | null> {
+  const data = await fetchFromAPI<{ artists?: Artist[] }>(
+    `https://theaudiodb.com/api/v1/json/123/artist.php?i=${encodeURIComponent(
+      id
+    )}`
+  );
+
+  return data?.artists?.[0] ?? null;
+}
+
 export async function getAlbumsByArtist(id: string): Promise<Album[]> {
   const data = await fetchFromAPI<{ album?: Album[] }>(
     `https://www.theaudiodb.com/api/v1/json/123/searchalbum.php?s=${encodeURIComponent(
+      id
+    )}`
+  );
+
+  return Array.isArray(data?.album) ? data.album : [];
+}
+
+export async function getAlbumsById(id: string): Promise<Album[]> {
+  const data = await fetchFromAPI<{ album?: Album[] }>(
+    `https://www.theaudiodb.com/api/v1/json/123/album.php?m=${encodeURIComponent(
       id
     )}`
   );
