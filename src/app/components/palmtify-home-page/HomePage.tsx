@@ -1,10 +1,10 @@
-import { getArtist, getTracksByAlbum } from "@/app/utils/apliClient";
-import Image from "next/image";
+import { getArtist } from "@/app/utils/apliClient";
 import HomePageSliders from "../home-page-sliders/HomePageSliders";
 import {
   hipHop90s,
   jumpBackIn,
   madeForYou,
+  megaAlbums,
   recentlyPlayed,
   someBands,
 } from "@/app/constants/albums";
@@ -19,8 +19,8 @@ export default async function HomePage() {
   );
 
   return (
-    <div className="p-4 pl-12 pr-12 bg-[#181818] rounded-lg flex flex-col items-center overflow-x-hidden">
-      <HomePageTopSection bandsData={bandsData} />
+    <div className="p-4 pl-12 pr-12 bg-[#181818] rounded-lg flex flex-col items-center overflow-x-hidden hide-scrollbar">
+      <HomePageTopSection albums={megaAlbums} />
 
       <HomePageSliders
         title={"You"}

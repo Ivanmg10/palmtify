@@ -61,6 +61,16 @@ export async function getAlbumsByArtist(id: string): Promise<Album[]> {
   return Array.isArray(data?.album) ? data.album : [];
 }
 
+export async function getAlbumsByArtistId(id: string): Promise<Album[]> {
+  const data = await fetchFromAPI<{ album?: Album[] }>(
+    `https://www.theaudiodb.com/api/v1/json/123/album.php?i=${encodeURIComponent(
+      id
+    )}`
+  );
+
+  return Array.isArray(data?.album) ? data.album : [];
+}
+
 export async function getAlbumsById(id: string): Promise<Album[]> {
   const data = await fetchFromAPI<{ album?: Album[] }>(
     `https://www.theaudiodb.com/api/v1/json/123/album.php?m=${encodeURIComponent(

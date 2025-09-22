@@ -44,3 +44,11 @@ main {
   background-color: var(--spotify-black-dark);
   height: calc(100vh - 60px); /* Ajusta según la altura del header */
 }
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Edge */
+}
+.hide-scrollbar {
+  -ms-overflow-style: none; /* IE y Edge */
+  scrollbar-width: none; /* Firefox */
+}

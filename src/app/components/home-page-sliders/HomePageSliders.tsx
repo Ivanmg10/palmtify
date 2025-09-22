@@ -49,9 +49,10 @@ export default async function HomePageSliders({
         {isArtist
           ? bandsData &&
             bandsData?.map((band) => (
-              <div
+              <Link
                 className="mt-4 hover:bg-[#282828] transition duration-300 p-3 rounded-lg cursor-pointer flex-shrink-0 "
                 key={band.band}
+                href={`/artist/${band.artist?.idArtist}`}
               >
                 <Image
                   className={"rounded-full"}
@@ -63,7 +64,7 @@ export default async function HomePageSliders({
 
                 <p className="mt-3 text-white">{band.band}</p>
                 <p className="text-[#B3B3B3]">Artist</p>
-              </div>
+              </Link>
             ))
           : albumsData.map((album) => (
               <Link

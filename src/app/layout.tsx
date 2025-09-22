@@ -45,7 +45,7 @@ export default async function RootLayout({
         <div className="min-h-screen">
           <PalmtifyHeader />
 
-          <main className="p-4 grid grid-cols-[400px_1fr] gap-4">
+          <main className="p-4 grid grid-cols-[auto_1fr] gap-4">
             <PalmtifyLateralLibrary recentlyPlayedArray={recentlyPlayedArray} />
             {children}
           </main>

@@ -2,6 +2,7 @@ import { StaticImport } from "next/dist/shared/lib/get-img-props";
 
 export interface Artist {
   idArtist: string;
+  idArtis: string;
   strArtist: string;
   strArtistThumb: string | StaticImport;
 }

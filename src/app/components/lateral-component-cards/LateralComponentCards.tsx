@@ -17,7 +17,7 @@ export default function LateralComponentCards({
   recentlyPlayedArray: RecentlyPlayedItem[];
 }) {
   return (
-    <div className="p-2 flex flex-col gap-2">
+    <div className="p-2 flex flex-col gap-2 scrollbar-none">
       {isSmall
         ? recentlyPlayedArray.map((playlist) => (
             <Link
