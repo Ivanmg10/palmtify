@@ -67,9 +67,9 @@ export default async function HomePageTopSection({
             <div className="relative sm:min-w-1/5 min-w-1/5 aspect-square flex-shrink-0">
               <Image
                 src={album?.strAlbumThumb || "/placeholder.png"}
-                alt={album?.strAlbum || "Album"}
+                alt="?"
                 fill
-                className="object-cover"
+                className="flex justify-center items-center object-cover"
               />
             </div>
             <div className="pl-6 py-4 grow flex items-center">

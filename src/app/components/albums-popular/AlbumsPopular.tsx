@@ -1,23 +1,14 @@
-import { Track } from "@/app/utils/apliClient";
 import { formatMilliseconds, formatNumber } from "@/app/utils/timeUtils";
-import { Album, TrackShort } from "@/types";
+import { TrackShort } from "@/types";
 import Image from "next/image";
 
 type AlbumsPopularProps = {
-  albums: Album[];
-  allTracks: Track[];
   topTracks: TrackShort[];
 };
 
-export default function AlbumsPopular({
-  albums,
-  allTracks,
-  topTracks,
-}: AlbumsPopularProps) {
-  console.log(topTracks);
-
+export default function AlbumsPopular({ topTracks }: AlbumsPopularProps) {
   return (
-    <div className="p-5">
+    <div className="">
       <p className="text-2xl text-white pb-5">Popular songs</p>
       <div className="flex flex-col flex-wrap">
         {topTracks.map((track, index) => (
@@ -29,9 +20,10 @@ export default function AlbumsPopular({
               <p className="px-2 cursor-pointer">{index + 1}</p>
               <Image
                 src={track.albumCover}
-                alt={track.album}
+                alt="?"
                 width={50}
                 height={50}
+                className="flex justify-center items-center"
               />
               <div>
                 <p className="text-white">{track.name}</p>

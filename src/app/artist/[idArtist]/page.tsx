@@ -1,3 +1,5 @@
+import AlbumsAbout from "@/app/components/albums-about/AlbumsAbout";
+import AlbumsDisco from "@/app/components/albums-discography/AlbumsDisco";
 import AlbumsPopular from "@/app/components/albums-popular/AlbumsPopular";
 import AlbumsTop from "@/app/components/albums-top/AlbumsTop";
 import {
@@ -62,14 +64,14 @@ export default async function ArtistPage({ params }: Props) {
   }
 
   return (
-    <div>
+    <div className="overflow-x-hidden hide-scrollbar">
       <AlbumsTop album={albums} artist={artist} />
 
-      <AlbumsPopular
-        albums={allAlbums}
-        allTracks={allTracks}
-        topTracks={topTracks}
-      />
+      <div className="p-5 flex flex-col gap-5">
+        <AlbumsPopular topTracks={topTracks} />
+        <AlbumsDisco albums={allAlbums} />
+        <AlbumsAbout artist={artist} />
+      </div>
     </div>
   );
 }

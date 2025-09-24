@@ -51,10 +51,10 @@ export default function AlbumsTop({ tracks, album, artist }: AlbumsTableProps) {
           {hasTracks && (
             <Image
               src={album[0].strAlbumThumb}
-              alt="album"
+              alt="?"
               width={300}
               height={300}
-              className="rounded-lg"
+              className="flex justify-center items-center rounded-lg"
             />
           )}
 
@@ -76,14 +76,14 @@ export default function AlbumsTop({ tracks, album, artist }: AlbumsTableProps) {
                       alt="artist"
                       width={30}
                       height={30}
-                      className="rounded-full"
+                      className="flex justify-center items-center rounded-full"
                     />
                     <p>{album[0].strArtist} •</p>
                   </Link>
                 )}
                 <p className="text-[#b3b3b3]">{album[0].intYearReleased} •</p>
                 <p className="text-[#b3b3b3]">{tracks.length} songs,</p>
-                <p className="text-[#b3b3b3]">{getAllMilliseconds()}</p>m
+                <p className="text-[#b3b3b3]">{getAllMilliseconds()}</p>
               </div>
             )}
 

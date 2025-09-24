@@ -8,6 +8,7 @@ export interface Artist {
   intBornYear: string;
   strStyle: string;
   strGenre: string;
+  strBiographyEN: string;
 }
 
 export interface Album {
@@ -18,6 +19,7 @@ export interface Album {
   strAlbumThumb: string;
   intYearReleased: string | null;
   strYear: string;
+  strReleaseFormat: string;
 }
 
 // export interface Track {
