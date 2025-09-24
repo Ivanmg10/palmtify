@@ -8,7 +8,11 @@ import {
   IconSearch,
 } from "@tabler/icons-react";
 
-export default function AlbumsButtons() {
+type AlbumsButtonsProps = {
+  hasTracks: boolean;
+};
+
+export default function AlbumsButtons({ hasTracks }: AlbumsButtonsProps) {
   const buttonsClassName =
     "w-8 h-8 cursor-pointer transition duration-300 hover:scale-125";
 
@@ -20,8 +24,17 @@ export default function AlbumsButtons() {
           className="bg-[#1db954] rounded-full w-13 h-13 p-3 text-black cursor-pointer transition duration-300 hover:scale-110 "
         />
         <IconArrowsShuffle stroke={2} className={buttonsClassName} />
-        <IconCirclePlus stroke={2} className={buttonsClassName} />
-        <IconCircleArrowDown stroke={2} className={buttonsClassName} />
+        {hasTracks ? (
+          <>
+            <IconCirclePlus stroke={2} className={buttonsClassName} />{" "}
+            <IconCircleArrowDown stroke={2} className={buttonsClassName} />{" "}
+          </>
+        ) : (
+          <button className="rounded-full px-3 py-1 p-3 text-white border-2 border-[#b3b3b3] cursor-pointer transition duration-200 hover:scale-105">
+            Follow
+          </button>
+        )}
+
         <IconDots stroke={2} className={buttonsClassName} />
       </div>
 

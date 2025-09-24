@@ -9,6 +9,8 @@ export type Track = {
   strAlbum: string;
   intDuration: number;
   strTrackThumb: string;
+  intTotalPlays: number;
+  intTotalListeners: number;
 };
 
 // Función genérica de fetch para la API

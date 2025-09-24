@@ -14,6 +14,8 @@ type AlbumsTableProps = {
 };
 
 export default function AlbumsTop({ tracks, album, artist }: AlbumsTableProps) {
+  const hasTracks = !!(tracks && tracks.length > 0);
+
   const getAllMilliseconds = () => {
     let total = 0;
     tracks?.forEach((track) => {
@@ -32,7 +34,7 @@ export default function AlbumsTop({ tracks, album, artist }: AlbumsTableProps) {
           className="absolute inset-0"
           style={{
             backgroundImage: `url(${
-              tracks ? album[0].strAlbumThumb : artist?.strArtistThumb
+              hasTracks ? album[0].strAlbumThumb : artist?.strArtistThumb
             })`,
             backgroundSize: "cover",
             backgroundPosition: "center",
@@ -43,10 +45,10 @@ export default function AlbumsTop({ tracks, album, artist }: AlbumsTableProps) {
 
         <div
           className={`relative z-10 flex flex-row items-end gap-2 p-5 ${
-            !tracks && "h-96"
+            !hasTracks && "h-96"
           }`}
         >
-          {tracks && (
+          {hasTracks && (
             <Image
               src={album[0].strAlbumThumb}
               alt="album"
@@ -57,12 +59,12 @@ export default function AlbumsTop({ tracks, album, artist }: AlbumsTableProps) {
           )}
 
           <div className="flex flex-col justify-center gap-1 pl-7">
-            {tracks && <p className="text-[#b3b3b3]">Album</p>}
+            {hasTracks && <p className="text-[#b3b3b3]">Album</p>}
 
             <p className={`text-8xl font-bold py-1 ${!tracks && "text-white"}`}>
-              {tracks ? album[0].strAlbum : artist?.strArtist}
+              {hasTracks ? album[0].strAlbum : artist?.strArtist}
             </p>
-            {tracks && (
+            {hasTracks && (
               <div className="flex flex-row gap-2 py-1 items-center">
                 {artist && (
                   <Link
@@ -81,14 +83,22 @@ export default function AlbumsTop({ tracks, album, artist }: AlbumsTableProps) {
                 )}
                 <p className="text-[#b3b3b3]">{album[0].intYearReleased} •</p>
                 <p className="text-[#b3b3b3]">{tracks.length} songs,</p>
-                <p className="text-[#b3b3b3]">{getAllMilliseconds()}</p>
+                <p className="text-[#b3b3b3]">{getAllMilliseconds()}</p>m
+              </div>
+            )}
+
+            {!hasTracks && (
+              <div className="flex flex-row gap-1">
+                <p className="text-[#b3b3b3]">{artist?.intBornYear}</p>
+                <p className="text-[#b3b3b3]">• {artist?.strStyle}</p>
+                <p className="text-[#b3b3b3]">• {artist?.strGenre}</p>
               </div>
             )}
           </div>
         </div>
       </div>
 
-      <AlbumsButtons />
+      <AlbumsButtons hasTracks={hasTracks} />
     </div>
   );
 }
