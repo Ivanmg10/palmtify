@@ -5,6 +5,10 @@ export interface Artist {
   idArtis: string;
   strArtist: string;
   strArtistThumb: string | StaticImport;
+  intBornYear: string;
+  strStyle: string;
+  strGenre: string;
+  strBiographyEN: string;
 }
 
 export interface Album {
@@ -15,6 +19,7 @@ export interface Album {
   strAlbumThumb: string;
   intYearReleased: string | null;
   strYear: string;
+  strReleaseFormat: string;
 }
 
 // export interface Track {
@@ -37,3 +42,13 @@ export interface BandData {
   band: string;
   artist: Artist | null;
 }
+
+export type TrackShort = {
+  id: string;
+  artist: string;
+  name: string;
+  album: string;
+  albumCover: string;
+  duration: number;
+  plays: number;
+};

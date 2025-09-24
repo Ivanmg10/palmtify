@@ -63,10 +63,10 @@ export default function PalmtifyHeader() {
         <div className="w-10 h-10 flex items-center justify-center rounded-full bg-[#535353] cursor-pointer hover:bg-[#ffffff]">
           <Image
             src={pfp}
-            alt="profile"
+            alt="?"
             width={40}
             height={40}
-            className="rounded-full"
+            className="flex justify-center items-center rounded-full"
           />
         </div>
       </div>

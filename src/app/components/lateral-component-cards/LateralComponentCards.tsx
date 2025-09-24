@@ -28,9 +28,10 @@ export default function LateralComponentCards({
               <Image
                 key={playlist.id}
                 src={playlist.album[0].strAlbumThumb}
-                alt={playlist.album[0].idAlbum}
+                alt="?"
                 width={150}
                 height={150}
+                className="flex justify-center items-center"
               />
             </Link>
           ))
@@ -43,10 +44,10 @@ export default function LateralComponentCards({
               <Image
                 key={playlist.id}
                 src={playlist.album[0].strAlbumThumb}
-                alt={playlist.album[0].idAlbum}
+                alt="?"
                 width={75}
                 height={75}
-                className="rounded-lg"
+                className="flex justify-center items-center rounded-lg"
               />
               <div>
                 <p>{playlist.album[0].strAlbum}</p>

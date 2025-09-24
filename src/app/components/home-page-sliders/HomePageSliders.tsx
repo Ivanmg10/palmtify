@@ -55,9 +55,9 @@ export default async function HomePageSliders({
                 href={`/artist/${band.artist?.idArtist}`}
               >
                 <Image
-                  className={"rounded-full"}
+                  className="flex justify-center items-center rounded-full"
                   src={band.artist?.strArtistThumb || "/placeholder.png"}
-                  alt={band.artist?.idArtist || band.band}
+                  alt="?"
                   width={200}
                   height={200}
                 />
@@ -73,9 +73,9 @@ export default async function HomePageSliders({
                 href={`/albums/${album?.album[0]?.idAlbum}`}
               >
                 <Image
-                  className={"rounded-lg"}
+                  className="flex justify-center items-center rounded-lg"
                   src={album?.album[0]?.strAlbumThumb || "/placeholder.png"}
-                  alt={album?.album[0]?.idAlbum}
+                  alt="?"
                   width={200}
                   height={200}
                 />
