@@ -8,13 +8,10 @@ export default function PalmtifyLateralLibrary({
   // const isSmall = width < 180;
 
   return (
-    <div className="relative overflow-auto rounded-lg bg-[#181818] w-[400px] max-w-[400px] hide-scrollbar">
-      <div>
-        <LateralComponentTop isSmall={false} />
-        <LateralComponentCards
-          isSmall={false}
-          recentlyPlayedArray={recentlyPlayedArray}
-        />
+    <div className="relative overflow-auto rounded-lg  w-[400px] max-w-[400px] hide-scrollbar">
+      <div className="flex flex-col gap-2">
+        <LateralComponentTop />
+        <LateralComponentCards recentlyPlayedArray={recentlyPlayedArray} />
       </div>
     </div>
   );

@@ -10,7 +10,7 @@ export default function AlbumsDisco({ albums }: AlbumsDiscographyProps) {
   return (
     <div className="">
       <p className="text-2xl text-white pb-5">Discography</p>
-      <div className="flex flex-row flex-nowrap overflow-x-auto hide-scrollbar justify-around w-full">
+      <div className="flex flex-row flex-nowrap overflow-x-auto hide-scrollbar justify-start w-full">
         {albums.map((album) => (
           <Link
             key={album.idAlbum}
