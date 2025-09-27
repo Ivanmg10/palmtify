@@ -17,7 +17,7 @@ export default async function AlbumPage({ params }: Props) {
   const artist = await getArtistById(album[0].idArtist);
 
   return (
-    <div className="text-white">
+    <div className="text-white bg-[#121212]">
       <AlbumsTop tracks={tracks} album={album} artist={artist} />
 
       <AlbumsTable tracks={tracks} />

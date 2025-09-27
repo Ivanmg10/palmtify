@@ -16,6 +16,9 @@ interface HomePageTopSectionProps {
 export default async function HomePageTopSection({
   albums,
 }: HomePageTopSectionProps) {
+  const buttonsStyle =
+    "bg-[#ffffff1a] hover:bg-[white] text-white hover:text-black rounded-full pl-5 pr-5  transition duration-300 px-2 py-1 text-semibold";
+
   const albumsData = albums
     ? await Promise.all(
         albums.map(async (band) => {
@@ -43,36 +46,31 @@ export default async function HomePageTopSection({
 
   return (
     <div className="w-full">
-      <div className="flex flex-row justify-start gap-2 mt-4">
-        <button className="bg-[#212121] text-white rounded-full pl-5 pr-5 hover:bg-[#282828] transition duration-300 px-x py-1">
-          All
-        </button>
+      <div className="flex flex-row justify-start gap-2 mt-4 mb-6">
+        <button className={buttonsStyle}>All</button>
 
-        <button className="bg-[#212121] text-white  rounded-full pl-5 pr-5 hover:bg-[#282828] transition duration-300">
-          Music
-        </button>
+        <button className={buttonsStyle}>Albums</button>
 
-        <button className="bg-[#212121] text-white rounded-full pl-5 pr-5  hover:bg-[#282828] transition duration-300">
-          Podcasts
-        </button>
+        <button className={buttonsStyle}>Artist</button>
       </div>
 
-      <div className="w-full mb-4 grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 grid justify-items-center mt-8 cursor-pointer">
+      <div className="w-full grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-3 grid justify-items-center cursor-pointer">
         {shuffledAlbums.map(({ album }) => (
           <Link
             key={album.idAlbum}
-            className="rounded-lg overflow-hidden shadow-lg bg-[#212121] text-[#FFFFFF] mb-2 hover:scale-103 transition-transform duration-300 w-full flex justify-between"
+            className="rounded-md overflow-hidden shadow-lg bg-[#ffffff1a] text-[#FFFFFF] mb-2 hover:scale-101 transition-transform duration-300 w-full flex justify-between"
             href={`/albums/${album.idAlbum}`}
           >
-            <div className="relative sm:min-w-1/5 min-w-1/5 aspect-square flex-shrink-0">
+            <div className="relative flex-shrink-0">
               <Image
                 src={album?.strAlbumThumb || "/placeholder.png"}
                 alt="?"
-                fill
+                width={80}
+                height={80}
                 className="flex justify-center items-center object-cover"
               />
             </div>
-            <div className="pl-6 py-4 grow flex items-center">
+            <div className="pl-4 py-4 grow flex items-center">
               <div className="font-bold text-l">{album?.strAlbum}</div>
             </div>
           </Link>

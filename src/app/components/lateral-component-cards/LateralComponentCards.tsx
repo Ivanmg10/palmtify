@@ -13,7 +13,7 @@ export default function LateralComponentCards({
   recentlyPlayedArray: RecentlyPlayedItem[];
 }) {
   return (
-    <div className="p-2 flex flex-col gap-2 scrollbar-none bg-[#181818]">
+    <div className="p-2 flex flex-col gap-2 scrollbar-none flex-1 bg-[#121212]">
       <div className="p-2 text-lg font-semibold flex flex-row justify-between items-center">
         <div className="flex flex-row items-center gap-3 cursor-default">
           <IconLayoutGridFilled stroke={2} size={24} className="m-auto" />

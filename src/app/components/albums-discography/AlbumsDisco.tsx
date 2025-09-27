@@ -22,7 +22,7 @@ export default function AlbumsDisco({ albums }: AlbumsDiscographyProps) {
               alt="?"
               width={200}
               height={200}
-              className="flex justify-center items-center"
+              className="flex justify-center items-center rounded-lg"
             />
             <div className="w-[200px]">
               <p className="text-white pt-1">{album.strAlbum}</p>
