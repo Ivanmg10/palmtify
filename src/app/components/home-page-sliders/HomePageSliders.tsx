@@ -42,7 +42,7 @@ export default async function HomePageSliders({
 
   return (
     <div className="w-full flex flex-col justify-start items-start mt-8 mb-4 relative">
-      <p className="text-white">{subtitle}</p>
+      <p className="text-[#b3b3b3]">{subtitle}</p>
       <h1 className="text-white text-2xl font-bold">{title}</h1>
 
       <div className="flex flex-row flex-nowrap overflow-x-auto justify-around albums-scroll w-full">
@@ -50,7 +50,7 @@ export default async function HomePageSliders({
           ? bandsData &&
             bandsData?.map((band) => (
               <Link
-                className="mt-4 hover:bg-[#282828] transition duration-300 p-3 rounded-lg cursor-pointer flex-shrink-0 "
+                className="mt-4 hover:bg-[#1f1f1f] transition duration-300 p-3 rounded-lg cursor-pointer flex-shrink-0 "
                 key={band.band}
                 href={`/artist/${band.artist?.idArtist}`}
               >
@@ -68,7 +68,7 @@ export default async function HomePageSliders({
             ))
           : albumsData.map((album) => (
               <Link
-                className="mt-4 hover:bg-[#282828] transition duration-300 p-3 rounded-lg cursor-pointer flex-shrink-0"
+                className="mt-4 hover:bg-[#1f1f1f] transition duration-300 p-3 rounded-lg cursor-pointer flex-shrink-0"
                 key={album?.album[0]?.idAlbum}
                 href={`/albums/${album?.album[0]?.idAlbum}`}
               >
@@ -80,7 +80,10 @@ export default async function HomePageSliders({
                   height={200}
                 />
 
-                <p className="mt-3 text-white">{album?.album[0]?.strAlbum}</p>
+                <p className="mt-3 text-white font-semibold">
+                  {album?.album[0]?.strAlbum}
+                </p>
+                <p className="text-[#B3B3B3]">{album?.album[0]?.strArtist}</p>
               </Link>
             ))}
 

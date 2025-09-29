@@ -64,7 +64,7 @@ export default async function ArtistPage({ params }: Props) {
   }
 
   return (
-    <div className="overflow-x-hidden hide-scrollbar">
+    <div className="overflow-x-hidden hide-scrollbar bg-[#121212]">
       <AlbumsTop album={albums} artist={artist} />
 
       <div className="p-5 flex flex-col gap-5">

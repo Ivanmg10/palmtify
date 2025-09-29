@@ -6,6 +6,7 @@ import { Track } from "@/app/utils/apliClient";
 import { Album, Artist } from "@/types";
 import { formatMilliseconds } from "@/app/utils/timeUtils";
 import Link from "next/link";
+import { IconArrowLeft } from "@tabler/icons-react";
 
 type AlbumsTableProps = {
   tracks?: Track[];
@@ -48,15 +49,25 @@ export default function AlbumsTop({ tracks, album, artist }: AlbumsTableProps) {
             !hasTracks && "h-96"
           }`}
         >
-          {hasTracks && (
-            <Image
-              src={album[0].strAlbumThumb}
-              alt="?"
-              width={300}
-              height={300}
-              className="flex justify-center items-center rounded-lg"
-            />
-          )}
+          <div className="flex flex-col justify-center gap-3">
+            {/* <Link href="/">
+              <IconArrowLeft
+                stroke={2}
+                size={36}
+                className="text-[#b3b3b3] rounded-full cursor-pointer hover:"
+              />
+            </Link> */}
+
+            {hasTracks && (
+              <Image
+                src={album[0].strAlbumThumb}
+                alt="?"
+                width={300}
+                height={300}
+                className="flex justify-center items-center rounded-lg"
+              />
+            )}
+          </div>
 
           <div className="flex flex-col justify-center gap-1 pl-7">
             {hasTracks && <p className="text-[#b3b3b3]">Album</p>}

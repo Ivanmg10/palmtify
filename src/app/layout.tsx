@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import "./globals.css";
-import PalmtifyHeader from "./components/palmtify-header/MainHeader";
 import PalmtifyLateralLibrary from "./components/palmtify-lateral-library/LateralLibrary";
 import { getAlbumsByArtistAndAlbum } from "./utils/apliClient";
 import { recentlyPlayed } from "./constants/albums";
+import MainBottomReproducer from "./components/palmtify-bottom-reproducer/MainBottomReproducer";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -41,15 +41,18 @@ export default async function RootLayout({
 
   return (
     <html lang="en">
-      <body className={`${poppins.variable} antialiased`}>
-        <div className="min-h-screen">
-          <PalmtifyHeader />
+      <body
+        className={`${poppins.variable} antialiased flex flex-col h-screen`}
+      >
+        <main className="flex-1 p-4 pb-0 grid grid-cols-[auto_1fr] gap-2 bg-black h-screen overflow-auto">
+          <PalmtifyLateralLibrary recentlyPlayedArray={recentlyPlayedArray} />
 
-          <main className="p-4 grid grid-cols-[auto_1fr] gap-4">
-            <PalmtifyLateralLibrary recentlyPlayedArray={recentlyPlayedArray} />
-            {children}
-          </main>
-        </div>
+          {children}
+        </main>
+
+        <footer className="sticky bottom-0 w-full bg-black text-white">
+          <MainBottomReproducer />
+        </footer>
       </body>
     </html>
   );

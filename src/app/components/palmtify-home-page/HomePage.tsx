@@ -19,7 +19,7 @@ export default async function HomePage() {
   );
 
   return (
-    <div className="p-4 pl-12 pr-12 bg-[#181818] rounded-lg flex flex-col items-center overflow-x-hidden hide-scrollbar">
+    <div className="pt-4 pl-12 pr-12 bg-[#121212] rounded-lg flex flex-col items-center overflow-x-hidden hide-scrollbar h-full">
       <HomePageTopSection albums={megaAlbums} />
 
       <HomePageSliders
