@@ -1,7 +1,7 @@
 import { getAlbumsByArtistAndAlbum } from "@/app/utils/apliClient";
-import { BandData } from "@/types";
 import Image from "next/image";
 import Link from "next/link";
+import logo from "../../../../public/logo.png";
 
 interface Albums {
   id: number;
@@ -45,7 +45,15 @@ export default async function HomePageTopSection({
   const shuffledAlbums = shuffleAndPick8(albumsData);
 
   return (
-    <div className="w-full">
+    <div className="w-full relative">
+      <Image
+        src={logo}
+        alt="logo"
+        className="text-white absolute right-0 top-0"
+        width={60}
+        height={60}
+      />
+
       <div className="flex flex-row justify-start gap-2 mt-4 mb-6">
         <button className={buttonsStyle}>All</button>
 

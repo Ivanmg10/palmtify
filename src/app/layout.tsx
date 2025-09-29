@@ -46,6 +46,7 @@ export default async function RootLayout({
       >
         <main className="flex-1 p-4 pb-0 grid grid-cols-[auto_1fr] gap-2 bg-black h-screen overflow-auto">
           <PalmtifyLateralLibrary recentlyPlayedArray={recentlyPlayedArray} />
+
           {children}
         </main>
 
