@@ -15,6 +15,9 @@ const poppins = Poppins({
 export const metadata: Metadata = {
   title: "Palmtify",
   description: "A Spotify clone built with Next.js and Tailwind CSS",
+  icons: {
+    icon: "./favicon.svg",
+  },
 };
 
 export default async function RootLayout({
