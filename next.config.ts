@@ -3,7 +3,7 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   reactStrictMode: true,
   images: {
-    domains: ["r2.theaudiodb.com"],
+    domains: ["r2.theaudiodb.com", "www.theaudiodb.com"],
     remotePatterns: [
       {
         protocol: "https",
