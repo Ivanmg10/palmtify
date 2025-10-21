@@ -6,6 +6,17 @@ export function formatMilliseconds(ms: number) {
   return `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
 }
 
+export function formatSeconds(s: number) {
+  const minutes = Math.floor(s / 60);
+  const seconds = s % 60;
+
+  return `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
+}
+
 export function formatNumber(num: number) {
   return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+}
+
+export function msToSeconds(ms: number): number {
+  return Math.floor(ms / 1000);
 }

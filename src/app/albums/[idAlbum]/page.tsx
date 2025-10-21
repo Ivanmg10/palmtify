@@ -20,7 +20,7 @@ export default async function AlbumPage({ params }: Props) {
     <div className="text-white bg-[#121212]">
       <AlbumsTop tracks={tracks} album={album} artist={artist} />
 
-      <AlbumsTable tracks={tracks} />
+      <AlbumsTable tracks={tracks} album={album} />
     </div>
   );
 }

@@ -2,23 +2,40 @@ import Image from "next/image";
 import Link from "next/link";
 import pfp from "../../../../public/pfp.jpg";
 
-export default function FooterLeft() {
+interface FooterLeftProps {
+  track: string;
+  artist: string;
+  albumCover: string;
+  albumLink: string;
+  artistLink: string;
+}
+
+export default function FooterLeft({
+  track,
+  artist,
+  albumCover,
+  albumLink,
+  artistLink,
+}: FooterLeftProps) {
   return (
     <div className="flex flex-row items-end gap-3 p-2">
       <Image
-        src={pfp}
+        src={albumCover}
         alt="spotify"
         className="rounded-lg"
         width={50}
         height={50}
       />
       <div className="flex flex-col justify-end p-1">
-        <Link href="/" className="text-semibold text-sm text-white">
-          Cancion
+        <Link
+          href={`/albums/${albumLink}`}
+          className="text-semibold text-sm text-white"
+        >
+          {track}
         </Link>
-        <Link href="/" className="text-sm w-fit">
+        <Link href={`/artist/${artistLink}`} className="text-sm w-fit">
           <span className="leading-none w-auto hover:text-white hover:border-b-1 border-b-white transition duration-300">
-            Artista
+            {artist}
           </span>
         </Link>
       </div>

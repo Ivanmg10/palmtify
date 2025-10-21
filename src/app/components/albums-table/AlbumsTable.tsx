@@ -1,12 +1,15 @@
 import { Track } from "@/app/utils/apliClient";
-import { formatMilliseconds } from "@/app/utils/timeUtils";
-import { IconClockHour2, IconPlayerPlayFilled } from "@tabler/icons-react";
+
+import { IconClockHour2 } from "@tabler/icons-react";
+import AlbumTrackRow from "../album-track-row/AlbumTrackRow";
+import { Album } from "@/types";
 
 type AlbumsTableProps = {
   tracks: Track[];
+  album: Album[];
 };
 
-export default async function AlbumsTable({ tracks }: AlbumsTableProps) {
+export default async function AlbumsTable({ tracks, album }: AlbumsTableProps) {
   return (
     <div className="p-4">
       <table className="table-auto w-full text-left text-[#b3b3b3]">
@@ -24,32 +27,12 @@ export default async function AlbumsTable({ tracks }: AlbumsTableProps) {
         </thead>
         <tbody className="pt-3">
           {tracks.map((track, index) => (
-            <tr
+            <AlbumTrackRow
               key={track.idTrack}
-              className="group hover:bg-[#282828] transition duration-300 "
-            >
-              <td className="flex items-center">
-                <p className="cursor-pointer text-white text-xl group p-5">
-                  <span className="inline-block w-[1em] h-[1em] text-center group-hover:hidden">
-                    {index + 1}
-                  </span>
-                  <span className="hidden group-hover:inline-flex items-center justify-center w-[1em] h-[1em]">
-                    <IconPlayerPlayFilled
-                      className="w-[1em] h-[1em]"
-                      stroke={2}
-                    />
-                  </span>
-                </p>
-
-                <div className="p-2">
-                  <p className="text-white">{track.strTrack}</p>
-                  <p>{track.strArtist}</p>
-                </div>
-              </td>
-
-              <td className="p-2">{track.strAlbum}</td>
-              <td className="p-2">{formatMilliseconds(track.intDuration)}</td>
-            </tr>
+              track={track}
+              index={index}
+              album={album}
+            />
           ))}
         </tbody>
       </table>

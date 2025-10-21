@@ -5,6 +5,7 @@ import PalmtifyLateralLibrary from "./components/palmtify-lateral-library/Latera
 import { getAlbumsByArtistAndAlbum } from "./utils/apliClient";
 import { recentlyPlayed } from "./constants/albums";
 import MainBottomReproducer from "./components/palmtify-bottom-reproducer/MainBottomReproducer";
+import { PlayerProvider } from "./context/PlayerContext";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -44,19 +45,21 @@ export default async function RootLayout({
 
   return (
     <html lang="en">
-      <body
-        className={`${poppins.variable} antialiased flex flex-col h-screen`}
-      >
-        <main className="flex-1 p-4 pb-0 grid grid-cols-[auto_1fr] gap-2 bg-black h-screen overflow-auto">
-          <PalmtifyLateralLibrary recentlyPlayedArray={recentlyPlayedArray} />
+      <PlayerProvider>
+        <body
+          className={`${poppins.variable} antialiased flex flex-col h-screen`}
+        >
+          <main className="flex-1 p-4 pb-0 grid grid-cols-[auto_1fr] gap-2 bg-black h-screen overflow-auto">
+            <PalmtifyLateralLibrary recentlyPlayedArray={recentlyPlayedArray} />
 
-          {children}
-        </main>
+            {children}
+          </main>
 
-        <footer className="sticky bottom-0 w-full bg-black text-white">
-          <MainBottomReproducer />
-        </footer>
-      </body>
+          <footer className="sticky bottom-0 w-full bg-black text-white">
+            <MainBottomReproducer />
+          </footer>
+        </body>
+      </PlayerProvider>
     </html>
   );
 }
