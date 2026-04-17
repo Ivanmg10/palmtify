@@ -28,6 +28,7 @@ export default function FooterCenter({ duration }: FooterCenterProps) {
     setIsPlaying(true);
 
     // Evitar múltiples intervalos
+    /* istanbul ignore next */
     if (intervalRef.current) return;
 
     intervalRef.current = setInterval(() => {

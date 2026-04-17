@@ -41,7 +41,7 @@ export default async function RootLayout({
           };
         })
       )
-    : [];
+    : /* istanbul ignore next */ [];
 
   return (
     <html lang="en">

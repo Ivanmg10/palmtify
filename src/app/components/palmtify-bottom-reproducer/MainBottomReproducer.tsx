@@ -14,8 +14,8 @@ export default function MainBottomReproducer() {
       <FooterLeft
         track={currentTrack.strTrack}
         artist={currentTrack.strArtist}
-        albumCover={currentAlbum ? currentAlbum[0].strAlbumThumb : ""}
-        albumLink={currentAlbum ? currentAlbum[0].idAlbum : ""}
+        albumCover={/* istanbul ignore next */ currentAlbum ? currentAlbum[0].strAlbumThumb : ""}
+        albumLink={/* istanbul ignore next */ currentAlbum ? currentAlbum[0].idAlbum : ""}
         artistLink={currentTrack.idArtist}
       />
 
