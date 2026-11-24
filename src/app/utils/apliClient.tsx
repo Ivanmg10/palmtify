@@ -1,107 +1,105 @@
-import { Album, Artist } from "@/types";
+import { Album, Artist, Track } from "@/types";
+import {
+  DeezerAlbum,
+  DeezerAlbumDetail,
+  DeezerArtist,
+  DeezerListResponse,
+  fetchDeezer,
+  mapDeezerAlbum,
+  mapDeezerArtist,
+  mapDeezerTrack,
+} from "./deezer";
 
-export type Track = {
-  idTrack: string;
-  strTrack: string;
-  idArtist: string;
-  strArtist: string;
-  idAlbum: string;
-  strAlbum: string;
-  intDuration: number;
-  strTrackThumb: string;
-  intTotalPlays: number;
-  intTotalListeners: number;
-};
+export type { Track };
 
-// Función genérica de fetch para la API
-async function fetchFromAPI<T>(endpoint: string): Promise<T | null> {
-  try {
-    const res = await fetch(endpoint, { next: { revalidate: 60 } });
-
-    if (!res.ok) {
-      console.error(`Error fetching ${endpoint}: ${res.status}`);
-      return null;
-    }
-
-    const data = await res.json();
-    return data as T;
-  } catch (error) {
-    console.error(`Fetch failed for ${endpoint}:`, error);
-    return null;
-  }
+function normalizeTitle(title: string): string {
+  return title
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-z0-9]/g, "");
 }
 
-// Funciones específicas usando la genérica
-
 export async function getArtist(name: string): Promise<Artist | null> {
-  const data = await fetchFromAPI<{ artists?: Artist[] }>(
-    `https://theaudiodb.com/api/v1/json/123/search.php?s=${encodeURIComponent(
-      name
-    )}`
+  const data = await fetchDeezer<DeezerListResponse<DeezerArtist>>(
+    `/search/artist?q=${encodeURIComponent(name)}`
   );
 
-  return data?.artists?.[0] ?? null;
+  const artist = data?.data?.[0];
+  return artist ? mapDeezerArtist(artist) : null;
 }
 
 export async function getArtistById(id: string): Promise<Artist | null> {
-  const data = await fetchFromAPI<{ artists?: Artist[] }>(
-    `https://theaudiodb.com/api/v1/json/123/artist.php?i=${encodeURIComponent(
-      id
-    )}`
+  const artist = await fetchDeezer<DeezerArtist>(
+    `/artist/${encodeURIComponent(id)}`
   );
 
-  return data?.artists?.[0] ?? null;
+  return artist ? mapDeezerArtist(artist) : null;
 }
 
-export async function getAlbumsByArtist(id: string): Promise<Album[]> {
-  const data = await fetchFromAPI<{ album?: Album[] }>(
-    `https://www.theaudiodb.com/api/v1/json/123/searchalbum.php?s=${encodeURIComponent(
-      id
-    )}`
-  );
+export async function getAlbumsByArtist(name: string): Promise<Album[]> {
+  const artist = await getArtist(name);
+  if (!artist) return [];
 
-  return Array.isArray(data?.album) ? data.album : [];
+  return getAlbumsByArtistId(artist.idArtist);
 }
 
 export async function getAlbumsByArtistId(id: string): Promise<Album[]> {
-  const data = await fetchFromAPI<{ album?: Album[] }>(
-    `https://www.theaudiodb.com/api/v1/json/123/album.php?i=${encodeURIComponent(
-      id
-    )}`
-  );
+  const [artist, albums] = await Promise.all([
+    fetchDeezer<DeezerArtist>(`/artist/${encodeURIComponent(id)}`),
+    fetchDeezer<DeezerListResponse<DeezerAlbum>>(
+      `/artist/${encodeURIComponent(id)}/albums?limit=100`
+    ),
+  ]);
 
-  return Array.isArray(data?.album) ? data.album : [];
+  if (!albums?.data) return [];
+  return albums.data.map((album) => mapDeezerAlbum(album, artist));
 }
 
 export async function getAlbumsById(id: string): Promise<Album[]> {
-  const data = await fetchFromAPI<{ album?: Album[] }>(
-    `https://www.theaudiodb.com/api/v1/json/123/album.php?m=${encodeURIComponent(
-      id
-    )}`
+  const album = await fetchDeezer<DeezerAlbumDetail>(
+    `/album/${encodeURIComponent(id)}`
   );
 
-  return Array.isArray(data?.album) ? data.album : [];
+  if (!album || album.id === undefined) return [];
+  return [mapDeezerAlbum(album, album.artist)];
 }
 
 export async function getAlbumsByArtistAndAlbum(
-  id: string,
-  album: string
+  artistName: string,
+  albumName: string
 ): Promise<Album[]> {
-  const data = await fetchFromAPI<{ album?: Album[] }>(
-    `https://www.theaudiodb.com/api/v1/json/123/searchalbum.php?s=${encodeURIComponent(
-      id
-    )}&a=${encodeURIComponent(album)}`
+  const search = await fetchDeezer<DeezerListResponse<DeezerArtist>>(
+    `/search/artist?q=${encodeURIComponent(artistName)}`
   );
 
-  return Array.isArray(data?.album) ? data.album : [];
+  const artist = search?.data?.[0];
+  if (!artist) return [];
+
+  const albums = await fetchDeezer<DeezerListResponse<DeezerAlbum>>(
+    `/artist/${artist.id}/albums?limit=100`
+  );
+  if (!albums?.data) return [];
+
+  const wanted = normalizeTitle(albumName);
+  const match =
+    albums.data.find((album) => normalizeTitle(album.title) === wanted) ??
+    albums.data.find((album) => normalizeTitle(album.title).includes(wanted));
+
+  return match ? [mapDeezerAlbum(match, artist)] : [];
 }
 
 export async function getTracksByAlbum(id: string): Promise<Track[]> {
-  const data = await fetchFromAPI<{ track?: Track[] }>(
-    `https://theaudiodb.com/api/v1/json/123/track.php?m=${encodeURIComponent(
-      id
-    )}`
+  const album = await fetchDeezer<DeezerAlbumDetail>(
+    `/album/${encodeURIComponent(id)}`
   );
 
-  return Array.isArray(data?.track) ? data.track : [];
+  if (!album?.tracks?.data) return [];
+  return album.tracks.data.map((track) =>
+    mapDeezerTrack(track, {
+      id: album.id,
+      title: album.title,
+      cover: album.cover_xl ?? album.cover_big ?? album.cover,
+    })
+  );
 }

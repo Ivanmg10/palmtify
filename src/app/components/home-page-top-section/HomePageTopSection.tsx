@@ -20,15 +20,17 @@ export default async function HomePageTopSection({
     "bg-[#ffffff1a] hover:bg-[white] text-white hover:text-black rounded-full pl-5 pr-5  transition duration-300 px-2 py-1 text-semibold";
 
   const albumsData = albums
-    ? await Promise.all(
-        albums.map(async (band) => {
-          const album = await getAlbumsByArtistAndAlbum(
-            band.artist,
-            band.album
-          );
-          return { album: album[0] };
-        })
-      )
+    ? (
+        await Promise.all(
+          albums.map(async (band) => {
+            const album = await getAlbumsByArtistAndAlbum(
+              band.artist,
+              band.album
+            );
+            return { album: album[0] };
+          })
+        )
+      ).filter((item) => item.album !== undefined)
     : [];
 
   // Fisher-Yates shuffle + slice a 8
