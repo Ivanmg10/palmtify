@@ -27,20 +27,22 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const recentlyPlayedArray = recentlyPlayed
-    ? await Promise.all(
-        recentlyPlayed.map(async (band) => {
-          const album = await getAlbumsByArtistAndAlbum(
-            band.artist,
-            band.album
-          );
-          return {
-            id: band.id,
-            artist: band.artist,
-            albumName: band.album,
-            album,
-          };
-        })
-      )
+    ? (
+        await Promise.all(
+          recentlyPlayed.map(async (band) => {
+            const album = await getAlbumsByArtistAndAlbum(
+              band.artist,
+              band.album
+            );
+            return {
+              id: band.id,
+              artist: band.artist,
+              albumName: band.album,
+              album,
+            };
+          })
+        )
+      ).filter((item) => item.album.length > 0)
     : /* istanbul ignore next */ [];
 
   return (

@@ -47,4 +47,16 @@ describe("LateralComponentCards", () => {
     render(<LateralComponentCards recentlyPlayedArray={[]} />);
     expect(screen.getByText("Your library")).toBeInTheDocument();
   });
+
+  test("uses placeholder when album has no thumb", () => {
+    const noThumb = [
+      {
+        ...mockRecentlyPlayedArray[0],
+        album: [{ ...mockRecentlyPlayedArray[0].album[0], strAlbumThumb: "" }],
+      },
+    ];
+    render(<LateralComponentCards recentlyPlayedArray={noThumb} />);
+    const img = screen.getByAltText("Nevermind");
+    expect(img.getAttribute("src")).toBe("/placeholder.png");
+  });
 });

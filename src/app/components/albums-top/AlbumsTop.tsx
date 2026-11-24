@@ -60,8 +60,8 @@ export default function AlbumsTop({ tracks, album, artist }: AlbumsTableProps) {
 
             {hasTracks && (
               <Image
-                src={album[0].strAlbumThumb}
-                alt="?"
+                src={album[0].strAlbumThumb || "/placeholder.png"}
+                alt={album[0].strAlbum}
                 width={300}
                 height={300}
                 className="flex justify-center items-center rounded-lg"
@@ -83,8 +83,8 @@ export default function AlbumsTop({ tracks, album, artist }: AlbumsTableProps) {
                     href={`/artist/${artist.idArtist}`}
                   >
                     <Image
-                      src={artist.strArtistThumb}
-                      alt="artist"
+                      src={artist.strArtistThumb || "/placeholder.png"}
+                      alt={artist.strArtist}
                       width={30}
                       height={30}
                       className="flex justify-center items-center rounded-full"

@@ -68,7 +68,31 @@ describe("HomePageTopSection", () => {
     ]);
     const element = await HomePageTopSection({ albums: [mockAlbums[0]] });
     render(element);
-    const img = screen.getByAltText("?");
+    const img = screen.getByAltText("Nevermind");
     expect(img.getAttribute("src")).toBe("/placeholder.png");
+  });
+
+  test("uses generic alt when album has no name", async () => {
+    (getAlbumsByArtistAndAlbum as jest.Mock).mockResolvedValue([
+      { ...mockAlbum, strAlbum: "" },
+    ]);
+    const element = await HomePageTopSection({ albums: [mockAlbums[0]] });
+    render(element);
+    expect(screen.getByAltText("Album")).toBeInTheDocument();
+  });
+
+  test("skips albums that could not be loaded", async () => {
+    (getAlbumsByArtistAndAlbum as jest.Mock)
+      .mockResolvedValueOnce([])
+      .mockResolvedValue([mockAlbum]);
+
+    const element = await HomePageTopSection({
+      albums: [mockAlbums[0], mockAlbums[1]],
+    });
+    render(element);
+
+    const links = screen.getAllByRole("link");
+    expect(links).toHaveLength(1);
+    expect(links[0].getAttribute("href")).toBe("/albums/200");
   });
 });

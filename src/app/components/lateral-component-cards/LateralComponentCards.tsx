@@ -42,8 +42,8 @@ export default function LateralComponentCards({
         >
           <Image
             key={playlist.id}
-            src={playlist.album[0].strAlbumThumb}
-            alt="?"
+            src={playlist.album[0].strAlbumThumb || "/placeholder.png"}
+            alt={playlist.albumName}
             width={75}
             height={75}
             className="flex justify-center items-center rounded-lg"

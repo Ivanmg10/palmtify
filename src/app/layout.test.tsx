@@ -4,7 +4,9 @@ jest.mock("./utils/apliClient", () => ({
 
 jest.mock("./components/palmtify-lateral-library/LateralLibrary", () => ({
   __esModule: true,
-  default: () => <div data-testid="lateral-library">LateralLibrary</div>,
+  default: jest.fn(() => (
+    <div data-testid="lateral-library">LateralLibrary</div>
+  )),
 }));
 
 jest.mock("./components/palmtify-bottom-reproducer/MainBottomReproducer", () => ({
@@ -21,6 +23,10 @@ jest.mock("./context/PlayerContext", () => ({
 import { render, screen } from "@testing-library/react";
 import RootLayout, { metadata } from "./layout";
 import { getAlbumsByArtistAndAlbum } from "./utils/apliClient";
+import { recentlyPlayed } from "./constants/albums";
+import LateralLibrary from "./components/palmtify-lateral-library/LateralLibrary";
+
+const mockLateralLibrary = LateralLibrary as unknown as jest.Mock;
 
 const mockAlbum = [
   {
@@ -36,6 +42,7 @@ const mockAlbum = [
 ];
 
 beforeEach(() => {
+  mockLateralLibrary.mockClear();
   (getAlbumsByArtistAndAlbum as jest.Mock).mockResolvedValue(mockAlbum);
 });
 
@@ -57,6 +64,27 @@ describe("RootLayout", () => {
     });
     render(element);
     expect(screen.getByTestId("lateral-library")).toBeInTheDocument();
+    consoleSpy.mockRestore();
+  });
+
+  test("filters out albums that could not be loaded", async () => {
+    const consoleSpy = jest.spyOn(console, "error").mockImplementation(() => {});
+    (getAlbumsByArtistAndAlbum as jest.Mock)
+      .mockResolvedValueOnce([])
+      .mockResolvedValue(mockAlbum);
+
+    const element = await RootLayout({
+      children: <div>Child</div>,
+    });
+    render(element);
+
+    const props = mockLateralLibrary.mock.calls[0][0];
+    expect(props.recentlyPlayedArray).toHaveLength(recentlyPlayed.length - 1);
+    expect(
+      props.recentlyPlayedArray.every(
+        (item: { album: unknown[] }) => item.album.length > 0
+      )
+    ).toBe(true);
     consoleSpy.mockRestore();
   });
 

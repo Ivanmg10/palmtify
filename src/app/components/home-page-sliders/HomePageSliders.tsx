@@ -29,16 +29,20 @@ export default async function HomePageSliders({
   const isArtist = title === "Your favorite artist";
 
   const albumsData = albums
-    ? await Promise.all(
-        albums.map(async (band) => {
-          const album = await getAlbumsByArtistAndAlbum(
-            band.artist,
-            band.album
-          );
-          return { album };
-        })
-      )
+    ? (
+        await Promise.all(
+          albums.map(async (band) => {
+            const album = await getAlbumsByArtistAndAlbum(
+              band.artist,
+              band.album
+            );
+            return { album };
+          })
+        )
+      ).filter((item) => item.album.length > 0)
     : [];
+
+  if (!isArtist && albums && albumsData.length === 0) return null;
 
   return (
     <div className="w-full flex flex-col justify-start items-start mt-8 mb-4 relative">
@@ -50,14 +54,14 @@ export default async function HomePageSliders({
           ? bandsData &&
             bandsData?.map((band) => (
               <Link
-                className="mt-4 hover:bg-[#1f1f1f] transition duration-300 p-3 rounded-lg cursor-pointer flex-shrink-0 "
+                className="mt-4 hover:bg-[#1f1f1f] transition duration-300 p-3 rounded-lg cursor-pointer flex-shrink-0 w-[200px]"
                 key={band.band}
                 href={`/artist/${band.artist?.idArtist}`}
               >
                 <Image
                   className="flex justify-center items-center rounded-full"
                   src={band.artist?.strArtistThumb || "/placeholder.png"}
-                  alt="?"
+                  alt={band.band}
                   width={200}
                   height={200}
                 />
@@ -68,14 +72,14 @@ export default async function HomePageSliders({
             ))
           : albumsData.map((album) => (
               <Link
-                className="mt-4 hover:bg-[#1f1f1f] transition duration-300 p-3 rounded-lg cursor-pointer flex-shrink-0"
+                className="mt-4 hover:bg-[#1f1f1f] transition duration-300 p-3 rounded-lg cursor-pointer flex-shrink-0 w-[200px]"
                 key={album?.album[0]?.idAlbum}
                 href={`/albums/${album?.album[0]?.idAlbum}`}
               >
                 <Image
                   className="flex justify-center items-center rounded-lg"
                   src={album?.album[0]?.strAlbumThumb || "/placeholder.png"}
-                  alt="?"
+                  alt={album?.album[0]?.strAlbum || "Album"}
                   width={200}
                   height={200}
                 />

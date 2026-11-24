@@ -19,8 +19,8 @@ export default function AlbumsPopular({ topTracks }: AlbumsPopularProps) {
             <div className="flex flex-row items-center gap-5 px-5 rounded-lg w-1/3">
               <p className="px-2 cursor-pointer">{index + 1}</p>
               <Image
-                src={track.albumCover}
-                alt="?"
+                src={track.albumCover || "/placeholder.png"}
+                alt={track.name}
                 width={50}
                 height={50}
                 className="flex justify-center items-center"

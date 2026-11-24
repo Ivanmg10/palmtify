@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { getArtist } from "@/app/utils/apliClient";
 
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
@@ -11,33 +12,13 @@ export async function GET(req: NextRequest) {
       { status: 400 }
     );
 
-  try {
-    const response = await fetch(
-      `https://theaudiodb.com/api/v1/json/123/search.php?s=${encodeURIComponent(
-        name
-      )}`
-    );
+  const artist = await getArtist(name);
 
-    if (!response.ok) {
-      const text = await response.text();
-      return NextResponse.json(
-        { error: "Error en TheAudioDB", body: text },
-        { status: response.status }
-      );
-    }
-
-    const data = await response.json();
-    if (!data.artists)
-      return NextResponse.json(
-        { error: "Artista no encontrado" },
-        { status: 404 }
-      );
-
-    return NextResponse.json(data.artists[0]);
-  } catch (error) {
+  if (!artist)
     return NextResponse.json(
-      { error: "Error llamando a TheAudioDB" },
-      { status: 500 }
+      { error: "Artista no encontrado" },
+      { status: 404 }
     );
-  }
+
+  return NextResponse.json(artist);
 }

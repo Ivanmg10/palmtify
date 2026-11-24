@@ -18,8 +18,8 @@ export default function AlbumsDisco({ albums }: AlbumsDiscographyProps) {
             href={`/albums/${album.idAlbum}`}
           >
             <Image
-              src={album.strAlbumThumb}
-              alt="?"
+              src={album.strAlbumThumb || "/placeholder.png"}
+              alt={album.strAlbum}
               width={200}
               height={200}
               className="flex justify-center items-center rounded-lg"

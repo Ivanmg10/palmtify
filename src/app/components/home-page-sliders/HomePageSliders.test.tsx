@@ -74,8 +74,49 @@ describe("HomePageSliders - album slider", () => {
       albums: mockAlbums,
     });
     render(element);
-    const img = screen.getByAltText("?");
+    const img = screen.getByAltText("Nevermind");
     expect(img.getAttribute("src")).toBe("/placeholder.png");
+  });
+
+  test("uses generic alt when album has no name", async () => {
+    (getAlbumsByArtistAndAlbum as jest.Mock).mockResolvedValue([
+      { ...mockAlbum[0], strAlbum: "" },
+    ]);
+    const element = await HomePageSliders({
+      title: "Made for You",
+      subtitle: "",
+      albums: mockAlbums,
+    });
+    render(element);
+    expect(screen.getByAltText("Album")).toBeInTheDocument();
+  });
+
+  test("skips albums that could not be loaded", async () => {
+    (getAlbumsByArtistAndAlbum as jest.Mock)
+      .mockResolvedValueOnce([])
+      .mockResolvedValue(mockAlbum);
+
+    const element = await HomePageSliders({
+      title: "Made for You",
+      subtitle: "",
+      albums: [mockAlbums[0], { ...mockAlbums[0], id: 2 }],
+    });
+    render(element);
+
+    expect(screen.getAllByRole("link")).toHaveLength(1);
+  });
+
+  test("renders nothing when no albums could be loaded", async () => {
+    (getAlbumsByArtistAndAlbum as jest.Mock).mockResolvedValue([]);
+
+    const element = await HomePageSliders({
+      title: "Made for You",
+      subtitle: "",
+      albums: mockAlbums,
+    });
+    const { container } = render(element);
+
+    expect(container).toBeEmptyDOMElement();
   });
 
   test("renders without albums", async () => {

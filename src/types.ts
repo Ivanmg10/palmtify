@@ -22,10 +22,18 @@ export interface Album {
   strReleaseFormat: string;
 }
 
-// export interface Track {
-//   idTrack: string;
-//   strTrack: string;
-// }
+export type Track = {
+  idTrack: string;
+  strTrack: string;
+  idArtist: string;
+  strArtist: string;
+  idAlbum: string;
+  strAlbum: string;
+  intDuration: number;
+  strTrackThumb: string;
+  intTotalPlays: number;
+  intTotalListeners: number;
+};
 
 export interface RecentlyPlayedItem {
   id: number;

@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { getTracksByAlbum } from "@/app/utils/apliClient";
 
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
@@ -10,33 +11,13 @@ export async function GET(req: NextRequest) {
       { status: 400 }
     );
 
-  try {
-    const response = await fetch(
-      `https://theaudiodb.com/api/v1/json/123/track.php?m=${encodeURIComponent(
-        id
-      )}`
-    );
+  const tracks = await getTracksByAlbum(id);
 
-    if (!response.ok) {
-      const text = await response.text();
-      return NextResponse.json(
-        { error: "Error en TheAudioDB", body: text },
-        { status: response.status }
-      );
-    }
-
-    const data = await response.json();
-    if (!data.track)
-      return NextResponse.json(
-        { error: "No hay canciones en este álbum" },
-        { status: 404 }
-      );
-
-    return NextResponse.json(data.track);
-  } catch (error) {
+  if (tracks.length === 0)
     return NextResponse.json(
-      { error: "Error llamando a TheAudioDB" },
-      { status: 500 }
+      { error: "No hay canciones en este álbum" },
+      { status: 404 }
     );
-  }
+
+  return NextResponse.json(tracks);
 }
