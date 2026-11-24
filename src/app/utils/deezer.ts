@@ -40,19 +40,32 @@ export type DeezerAlbumDetail = DeezerAlbum & {
 };
 
 const DEEZER_BASE_URL = "https://api.deezer.com";
+const DEEZER_REVALIDATE_SECONDS = 3600;
+const RETRYABLE_STATUS = 429;
+const MAX_ATTEMPTS = 3;
 
-export async function fetchDeezer<T>(endpoint: string): Promise<T | null> {
+export async function fetchDeezer<T>(
+  endpoint: string,
+  attempt = 1
+): Promise<T | null> {
   try {
-    const res = await fetch(`${DEEZER_BASE_URL}${endpoint}`, {
-      next: { revalidate: 60 },
-    });
+    const options =
+      attempt === 1
+        ? { next: { revalidate: DEEZER_REVALIDATE_SECONDS } }
+        : { cache: "no-store" as const };
 
-    if (!res.ok) {
+    const res = await fetch(`${DEEZER_BASE_URL}${endpoint}`, options);
+
+    if (res.ok) return (await res.json()) as T;
+
+    const isRetryable = res.status === RETRYABLE_STATUS && attempt < MAX_ATTEMPTS;
+    if (!isRetryable) {
       console.error(`Error fetching Deezer ${endpoint}: ${res.status}`);
       return null;
     }
 
-    return (await res.json()) as T;
+    await new Promise((resolve) => setTimeout(resolve, 500 * attempt));
+    return fetchDeezer<T>(endpoint, attempt + 1);
   } catch (error) {
     console.error(`Fetch failed for Deezer ${endpoint}:`, error);
     return null;

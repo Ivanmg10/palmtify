@@ -285,8 +285,27 @@ describe("getAlbumsByArtistAndAlbum", () => {
     consoleSpy.mockRestore();
   });
 
-  test("returns empty array when no album matches", async () => {
-    mockSearchAndAlbums({ data: [dzAlbum] });
+  test("falls back to free album search when not in the artist list", async () => {
+    global.fetch = jest
+      .fn()
+      .mockResolvedValueOnce(mockOk({ data: [dzArtist] }))
+      .mockResolvedValueOnce(mockOk({ data: [dzAlbum] }))
+      .mockResolvedValueOnce(
+        mockOk({ data: [{ id: 382588897, title: "Operation: Doomsday (Complete)" }] })
+      );
+
+    const result = await getAlbumsByArtistAndAlbum("MF DOOM", "Operation: Doomsday");
+    expect(result).toHaveLength(1);
+    expect(result[0].idAlbum).toBe("382588897");
+    expect(result[0].strArtist).toBe("Nirvana");
+  });
+
+  test("returns empty array when fallback search finds nothing", async () => {
+    global.fetch = jest
+      .fn()
+      .mockResolvedValueOnce(mockOk({ data: [dzArtist] }))
+      .mockResolvedValueOnce(mockOk({ data: [dzAlbum] }))
+      .mockResolvedValueOnce(mockOk({ data: [] }));
 
     const result = await getAlbumsByArtistAndAlbum("Nirvana", "In Utero");
     expect(result).toEqual([]);

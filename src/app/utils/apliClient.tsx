@@ -86,7 +86,16 @@ export async function getAlbumsByArtistAndAlbum(
     albums.data.find((album) => normalizeTitle(album.title) === wanted) ??
     albums.data.find((album) => normalizeTitle(album.title).includes(wanted));
 
-  return match ? [mapDeezerAlbum(match, artist)] : [];
+  if (match) return [mapDeezerAlbum(match, artist)];
+
+  // Fallback: búsqueda libre para álbumes que no están en la lista del
+  // artista (recopilatorios, ediciones especiales, etc.)
+  const fallback = await fetchDeezer<DeezerListResponse<DeezerAlbum>>(
+    `/search/album?q=${encodeURIComponent(`${artistName} ${albumName}`)}`
+  );
+
+  const fallbackAlbum = fallback?.data?.[0];
+  return fallbackAlbum ? [mapDeezerAlbum(fallbackAlbum, artist)] : [];
 }
 
 export async function getTracksByAlbum(id: string): Promise<Track[]> {

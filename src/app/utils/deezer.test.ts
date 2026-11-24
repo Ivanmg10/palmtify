@@ -51,6 +51,45 @@ describe("fetchDeezer", () => {
     consoleSpy.mockRestore();
   });
 
+  test("retries once on 429 and succeeds", async () => {
+    global.fetch = jest
+      .fn()
+      .mockResolvedValueOnce({ ok: false, status: 429 })
+      .mockResolvedValueOnce({
+        ok: true,
+        json: jest.fn().mockResolvedValue({ data: [dzArtist] }),
+      });
+
+    const result = await fetchDeezer("/search/artist?q=nirvana");
+    expect(result).toEqual({ data: [dzArtist] });
+    expect(global.fetch).toHaveBeenCalledTimes(2);
+  });
+
+  test("retries twice on repeated 429 and succeeds", async () => {
+    global.fetch = jest
+      .fn()
+      .mockResolvedValueOnce({ ok: false, status: 429 })
+      .mockResolvedValueOnce({ ok: false, status: 429 })
+      .mockResolvedValueOnce({
+        ok: true,
+        json: jest.fn().mockResolvedValue({ data: [dzArtist] }),
+      });
+
+    const result = await fetchDeezer("/search/artist?q=nirvana");
+    expect(result).toEqual({ data: [dzArtist] });
+    expect(global.fetch).toHaveBeenCalledTimes(3);
+  });
+
+  test("returns null when all attempts are 429", async () => {
+    const consoleSpy = jest.spyOn(console, "error").mockImplementation(() => {});
+    global.fetch = jest.fn().mockResolvedValue({ ok: false, status: 429 });
+
+    const result = await fetchDeezer("/artist/415");
+    expect(result).toBeNull();
+    expect(global.fetch).toHaveBeenCalledTimes(3);
+    consoleSpy.mockRestore();
+  });
+
   test("returns null on fetch error", async () => {
     const consoleSpy = jest.spyOn(console, "error").mockImplementation(() => {});
     global.fetch = jest.fn().mockRejectedValue(new Error("Network error"));
