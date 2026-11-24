@@ -47,4 +47,14 @@ describe("AlbumsDisco", () => {
     const links = screen.getAllByRole("link");
     expect(links[0].getAttribute("href")).toBe("/albums/1");
   });
+
+  test("uses placeholder when album has no thumb", () => {
+    render(
+      <AlbumsDisco
+        albums={[{ ...mockAlbums[1], strAlbumThumb: "" }]}
+      />
+    );
+    const img = screen.getByAltText("In Utero");
+    expect(img.getAttribute("src")).toBe("/placeholder.png");
+  });
 });

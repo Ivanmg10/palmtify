@@ -108,6 +108,18 @@ describe("AlbumsTop without tracks (artist view)", () => {
     expect(screen.getByText("Follow")).toBeInTheDocument();
   });
 
+  test("uses placeholder when artist has no thumb", () => {
+    render(
+      <AlbumsTop
+        tracks={mockTracks}
+        album={mockAlbum}
+        artist={{ ...mockArtist, strArtistThumb: "" }}
+      />
+    );
+    const img = screen.getByAltText("Nirvana");
+    expect(img.getAttribute("src")).toBe("/placeholder.png");
+  });
+
   test("renders null artist gracefully", () => {
     render(<AlbumsTop tracks={[]} album={mockAlbum} artist={null} />);
     expect(screen.queryByText("Nirvana")).not.toBeInTheDocument();
@@ -126,5 +138,17 @@ describe("AlbumsTop with tracks but no artist", () => {
     );
     expect(screen.getByText("Nevermind")).toBeInTheDocument();
     expect(screen.queryByRole("link", { name: /Nirvana/ })).not.toBeInTheDocument();
+  });
+
+  test("uses placeholder when album has no thumb", () => {
+    render(
+      <AlbumsTop
+        tracks={mockTracks}
+        album={[{ ...mockAlbum[0], strAlbumThumb: "" }]}
+        artist={mockArtist}
+      />
+    );
+    const img = screen.getByAltText("Nevermind");
+    expect(img.getAttribute("src")).toBe("/placeholder.png");
   });
 });

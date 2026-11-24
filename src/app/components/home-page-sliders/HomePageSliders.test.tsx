@@ -74,8 +74,21 @@ describe("HomePageSliders - album slider", () => {
       albums: mockAlbums,
     });
     render(element);
-    const img = screen.getByAltText("?");
+    const img = screen.getByAltText("Nevermind");
     expect(img.getAttribute("src")).toBe("/placeholder.png");
+  });
+
+  test("uses generic alt when album has no name", async () => {
+    (getAlbumsByArtistAndAlbum as jest.Mock).mockResolvedValue([
+      { ...mockAlbum[0], strAlbum: "" },
+    ]);
+    const element = await HomePageSliders({
+      title: "Made for You",
+      subtitle: "",
+      albums: mockAlbums,
+    });
+    render(element);
+    expect(screen.getByAltText("Album")).toBeInTheDocument();
   });
 
   test("renders without albums", async () => {

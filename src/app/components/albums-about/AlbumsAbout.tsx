@@ -14,7 +14,7 @@ export default function AlbumsAbout({ artist }: AlbumsAboutProps) {
         <div className="relative hover:scale-101 transition duration-300 w-1/3 aspect-square">
           <Image
             src={artist?.strArtistThumb || "/placeholder.png"}
-            alt="?"
+            alt={artist?.strArtist || "Artist"}
             fill
             style={{ objectFit: "initial" }}
             className="rounded-lg flex justify-center items-center"

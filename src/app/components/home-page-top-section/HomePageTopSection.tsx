@@ -74,7 +74,7 @@ export default async function HomePageTopSection({
             <div className="relative flex-shrink-0">
               <Image
                 src={album?.strAlbumThumb || "/placeholder.png"}
-                alt="?"
+                alt={album?.strAlbum || "Album"}
                 width={80}
                 height={80}
                 className="flex justify-center items-center object-cover"

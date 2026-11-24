@@ -57,7 +57,7 @@ export default async function HomePageSliders({
                 <Image
                   className="flex justify-center items-center rounded-full"
                   src={band.artist?.strArtistThumb || "/placeholder.png"}
-                  alt="?"
+                  alt={band.band}
                   width={200}
                   height={200}
                 />
@@ -75,7 +75,7 @@ export default async function HomePageSliders({
                 <Image
                   className="flex justify-center items-center rounded-lg"
                   src={album?.album[0]?.strAlbumThumb || "/placeholder.png"}
-                  alt="?"
+                  alt={album?.album[0]?.strAlbum || "Album"}
                   width={200}
                   height={200}
                 />

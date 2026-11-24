@@ -49,4 +49,14 @@ describe("AlbumsPopular", () => {
     render(<AlbumsPopular topTracks={mockTracks} />);
     expect(screen.getByText("5:01")).toBeInTheDocument();
   });
+
+  test("uses placeholder when track has no album cover", () => {
+    render(
+      <AlbumsPopular
+        topTracks={[{ ...mockTracks[1], albumCover: "" }]}
+      />
+    );
+    const img = screen.getByAltText("Come as You Are");
+    expect(img.getAttribute("src")).toBe("/placeholder.png");
+  });
 });
