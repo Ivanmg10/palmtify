@@ -91,6 +91,21 @@ describe("HomePageSliders - album slider", () => {
     expect(screen.getByAltText("Album")).toBeInTheDocument();
   });
 
+  test("skips albums that could not be loaded", async () => {
+    (getAlbumsByArtistAndAlbum as jest.Mock)
+      .mockResolvedValueOnce([])
+      .mockResolvedValue(mockAlbum);
+
+    const element = await HomePageSliders({
+      title: "Made for You",
+      subtitle: "",
+      albums: [mockAlbums[0], { ...mockAlbums[0], id: 2 }],
+    });
+    render(element);
+
+    expect(screen.getAllByRole("link")).toHaveLength(1);
+  });
+
   test("renders without albums", async () => {
     const element = await HomePageSliders({
       title: "Empty",

@@ -1,4 +1,5 @@
 import {
+  clearDeezerCache,
   fetchDeezer,
   mapDeezerAlbum,
   mapDeezerArtist,
@@ -29,6 +30,10 @@ const dzTrack = {
 
 afterEach(() => {
   jest.restoreAllMocks();
+});
+
+beforeEach(() => {
+  clearDeezerCache();
 });
 
 describe("fetchDeezer", () => {
@@ -88,6 +93,53 @@ describe("fetchDeezer", () => {
     expect(result).toBeNull();
     expect(global.fetch).toHaveBeenCalledTimes(3);
     consoleSpy.mockRestore();
+  });
+
+  test("returns null when the body carries an in-band error", async () => {
+    const consoleSpy = jest.spyOn(console, "error").mockImplementation(() => {});
+    global.fetch = jest.fn().mockResolvedValue({
+      ok: true,
+      json: jest.fn().mockResolvedValue({
+        error: { type: "DataException", message: "no data", code: 800 },
+      }),
+    });
+
+    const result = await fetchDeezer("/album/undefined");
+
+    expect(result).toBeNull();
+    expect(global.fetch).toHaveBeenCalledTimes(1);
+    consoleSpy.mockRestore();
+  });
+
+  test("serves subsequent calls from the in-memory cache", async () => {
+    global.fetch = jest.fn().mockResolvedValue({
+      ok: true,
+      json: jest.fn().mockResolvedValue({ data: [dzArtist] }),
+    });
+
+    const first = await fetchDeezer("/search/artist?q=nirvana");
+    const second = await fetchDeezer("/search/artist?q=nirvana");
+
+    expect(second).toEqual(first);
+    expect(global.fetch).toHaveBeenCalledTimes(1);
+  });
+
+  test("refetches when the cached entry expires", async () => {
+    jest.useFakeTimers({ now: 1_000_000 });
+    try {
+      global.fetch = jest.fn().mockResolvedValue({
+        ok: true,
+        json: jest.fn().mockResolvedValue({ data: [dzArtist] }),
+      });
+
+      await fetchDeezer("/artist/415");
+      jest.setSystemTime(1_000_000 + 3_600_000 + 1);
+      await fetchDeezer("/artist/415");
+
+      expect(global.fetch).toHaveBeenCalledTimes(2);
+    } finally {
+      jest.useRealTimers();
+    }
   });
 
   test("returns null on fetch error", async () => {

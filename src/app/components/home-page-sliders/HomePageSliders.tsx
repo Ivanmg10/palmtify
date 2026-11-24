@@ -29,15 +29,17 @@ export default async function HomePageSliders({
   const isArtist = title === "Your favorite artist";
 
   const albumsData = albums
-    ? await Promise.all(
-        albums.map(async (band) => {
-          const album = await getAlbumsByArtistAndAlbum(
-            band.artist,
-            band.album
-          );
-          return { album };
-        })
-      )
+    ? (
+        await Promise.all(
+          albums.map(async (band) => {
+            const album = await getAlbumsByArtistAndAlbum(
+              band.artist,
+              band.album
+            );
+            return { album };
+          })
+        )
+      ).filter((item) => item.album.length > 0)
     : [];
 
   return (

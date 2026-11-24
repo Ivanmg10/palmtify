@@ -7,6 +7,7 @@ import {
   getAlbumsByArtistAndAlbum,
   getTracksByAlbum,
 } from "./apliClient";
+import { clearDeezerCache } from "./deezer";
 
 const dzArtist = {
   id: 415,
@@ -43,6 +44,7 @@ function mockDeezer(payload: unknown) {
 
 beforeEach(() => {
   jest.clearAllMocks();
+  clearDeezerCache();
 });
 
 afterEach(() => {

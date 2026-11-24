@@ -1,7 +1,7 @@
 import { GET } from "./route";
 import { NextRequest } from "next/server";
 
-const makeRequest = (url: string) => new NextRequest(url) as any;
+const makeRequest = (url: string) => new NextRequest(url);
 
 const dzTrack = {
   id: 1543592112,

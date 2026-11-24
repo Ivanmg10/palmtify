@@ -17,6 +17,7 @@ jest.mock("../../components/albums-top/AlbumsTop", () => ({
 import { render, screen } from "@testing-library/react";
 import AlbumPage from "./page";
 import { getAlbumsById, getArtistById, getTracksByAlbum } from "@/app/utils/apliClient";
+import { notFound } from "next/navigation";
 
 const mockAlbum = [
   {
@@ -66,10 +67,20 @@ beforeEach(() => {
 describe("AlbumPage", () => {
   test("renders album top and table", async () => {
     const element = await AlbumPage({
-      params: Promise.resolve({ idAlbum: "200" }) as any,
+      params: Promise.resolve({ idAlbum: "200" }),
     });
     render(element);
     expect(screen.getByTestId("albums-top")).toBeInTheDocument();
     expect(screen.getByTestId("albums-table")).toBeInTheDocument();
+  });
+
+  test("calls notFound when the album does not exist", async () => {
+    (getAlbumsById as jest.Mock).mockResolvedValue([]);
+    (getTracksByAlbum as jest.Mock).mockResolvedValue([]);
+
+    await expect(
+      AlbumPage({ params: Promise.resolve({ idAlbum: "999" }) })
+    ).rejects.toThrow("NEXT_NOT_FOUND");
+    expect(notFound).toHaveBeenCalled();
   });
 });

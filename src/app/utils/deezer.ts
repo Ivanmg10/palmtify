@@ -43,11 +43,27 @@ const DEEZER_BASE_URL = "https://api.deezer.com";
 const DEEZER_REVALIDATE_SECONDS = 3600;
 const RETRYABLE_STATUS = 429;
 const MAX_ATTEMPTS = 3;
+const CACHE_TTL_MS = 60 * 60 * 1000;
+
+type CacheEntry = { data: unknown; expiresAt: number };
+
+const responseCache = new Map<string, CacheEntry>();
+
+export function clearDeezerCache(): void {
+  responseCache.clear();
+}
 
 export async function fetchDeezer<T>(
   endpoint: string,
   attempt = 1
 ): Promise<T | null> {
+  if (attempt === 1) {
+    const cached = responseCache.get(endpoint);
+    if (cached && cached.expiresAt > Date.now()) {
+      return cached.data as T;
+    }
+  }
+
   try {
     const options =
       attempt === 1
@@ -56,7 +72,24 @@ export async function fetchDeezer<T>(
 
     const res = await fetch(`${DEEZER_BASE_URL}${endpoint}`, options);
 
-    if (res.ok) return (await res.json()) as T;
+    if (res.ok) {
+      const data = (await res.json()) as T & { error?: unknown };
+
+      // Deezer reports some failures (unknown id, quota) with HTTP 200 and an
+      // in-band `error` object instead of a non-OK status.
+      if (data !== null && typeof data === "object" && "error" in data) {
+        console.error(
+          `Error fetching Deezer ${endpoint}: ${JSON.stringify(data.error)}`
+        );
+        return null;
+      }
+
+      responseCache.set(endpoint, {
+        data,
+        expiresAt: Date.now() + CACHE_TTL_MS,
+      });
+      return data;
+    }
 
     const isRetryable = res.status === RETRYABLE_STATUS && attempt < MAX_ATTEMPTS;
     if (!isRetryable) {
