@@ -106,6 +106,19 @@ describe("HomePageSliders - album slider", () => {
     expect(screen.getAllByRole("link")).toHaveLength(1);
   });
 
+  test("renders nothing when no albums could be loaded", async () => {
+    (getAlbumsByArtistAndAlbum as jest.Mock).mockResolvedValue([]);
+
+    const element = await HomePageSliders({
+      title: "Made for You",
+      subtitle: "",
+      albums: mockAlbums,
+    });
+    const { container } = render(element);
+
+    expect(container).toBeEmptyDOMElement();
+  });
+
   test("renders without albums", async () => {
     const element = await HomePageSliders({
       title: "Empty",

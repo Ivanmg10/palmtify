@@ -44,13 +44,32 @@ const DEEZER_REVALIDATE_SECONDS = 3600;
 const RETRYABLE_STATUS = 429;
 const MAX_ATTEMPTS = 3;
 const CACHE_TTL_MS = 60 * 60 * 1000;
+const MAX_CONCURRENT_REQUESTS = 5;
 
 type CacheEntry = { data: unknown; expiresAt: number };
 
 const responseCache = new Map<string, CacheEntry>();
+const inflightRequests = new Map<string, Promise<unknown>>();
+const waitQueue: Array<() => void> = [];
+let activeRequests = 0;
 
 export function clearDeezerCache(): void {
   responseCache.clear();
+}
+
+async function acquireSlot(): Promise<void> {
+  if (activeRequests < MAX_CONCURRENT_REQUESTS) {
+    activeRequests += 1;
+    return;
+  }
+  await new Promise<void>((resolve) => waitQueue.push(resolve));
+  activeRequests += 1;
+}
+
+function releaseSlot(): void {
+  activeRequests -= 1;
+  const next = waitQueue.shift();
+  if (next) next();
 }
 
 export async function fetchDeezer<T>(
@@ -62,8 +81,30 @@ export async function fetchDeezer<T>(
     if (cached && cached.expiresAt > Date.now()) {
       return cached.data as T;
     }
+    const inflight = inflightRequests.get(endpoint);
+    if (inflight) {
+      return inflight as Promise<T | null>;
+    }
   }
 
+  const request = performFetch<T>(endpoint, attempt);
+
+  if (attempt === 1) {
+    inflightRequests.set(endpoint, request);
+    request.then(
+      () => inflightRequests.delete(endpoint),
+      () => inflightRequests.delete(endpoint)
+    );
+  }
+
+  return request;
+}
+
+async function performFetch<T>(
+  endpoint: string,
+  attempt: number
+): Promise<T | null> {
+  await acquireSlot();
   try {
     const options =
       attempt === 1
@@ -98,10 +139,12 @@ export async function fetchDeezer<T>(
     }
 
     await new Promise((resolve) => setTimeout(resolve, 500 * attempt));
-    return fetchDeezer<T>(endpoint, attempt + 1);
+    return performFetch<T>(endpoint, attempt + 1);
   } catch (error) {
     console.error(`Fetch failed for Deezer ${endpoint}:`, error);
     return null;
+  } finally {
+    releaseSlot();
   }
 }
 

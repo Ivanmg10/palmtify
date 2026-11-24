@@ -111,6 +111,62 @@ describe("fetchDeezer", () => {
     consoleSpy.mockRestore();
   });
 
+  test("deduplicates concurrent requests to the same endpoint", async () => {
+    let resolveFetch!: (value: unknown) => void;
+    global.fetch = jest.fn(
+      () =>
+        new Promise((resolve) => {
+          resolveFetch = resolve;
+        })
+    );
+
+    const first = fetchDeezer("/artist/415");
+    const second = fetchDeezer("/artist/415");
+
+    await Promise.resolve();
+    await Promise.resolve();
+    expect(global.fetch).toHaveBeenCalledTimes(1);
+
+    resolveFetch({
+      ok: true,
+      json: jest.fn().mockResolvedValue({ data: [dzArtist] }),
+    });
+
+    await expect(first).resolves.toEqual({ data: [dzArtist] });
+    await expect(second).resolves.toEqual({ data: [dzArtist] });
+  });
+
+  test("limits the number of concurrent requests", async () => {
+    const gates: Array<() => void> = [];
+    const okResponse = () => ({
+      ok: true,
+      json: jest.fn().mockResolvedValue({ data: [] }),
+    });
+    let call = 0;
+    global.fetch = jest.fn(() => {
+      call += 1;
+      if (call <= 5) {
+        return new Promise((resolve) => {
+          gates.push(() => resolve(okResponse()));
+        });
+      }
+      return Promise.resolve(okResponse());
+    });
+
+    const requests = Array.from({ length: 7 }, (_, i) =>
+      fetchDeezer(`/album/${i}`)
+    );
+
+    await new Promise((resolve) => setTimeout(resolve, 0));
+    await new Promise((resolve) => setTimeout(resolve, 0));
+    expect(global.fetch).toHaveBeenCalledTimes(5);
+
+    gates.shift()!();
+    gates.forEach((open) => open());
+    await Promise.all(requests);
+    expect(global.fetch).toHaveBeenCalledTimes(7);
+  });
+
   test("serves subsequent calls from the in-memory cache", async () => {
     global.fetch = jest.fn().mockResolvedValue({
       ok: true,

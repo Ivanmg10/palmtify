@@ -42,6 +42,8 @@ export default async function HomePageSliders({
       ).filter((item) => item.album.length > 0)
     : [];
 
+  if (!isArtist && albums && albumsData.length === 0) return null;
+
   return (
     <div className="w-full flex flex-col justify-start items-start mt-8 mb-4 relative">
       <p className="text-[#b3b3b3]">{subtitle}</p>
@@ -52,7 +54,7 @@ export default async function HomePageSliders({
           ? bandsData &&
             bandsData?.map((band) => (
               <Link
-                className="mt-4 hover:bg-[#1f1f1f] transition duration-300 p-3 rounded-lg cursor-pointer flex-shrink-0 "
+                className="mt-4 hover:bg-[#1f1f1f] transition duration-300 p-3 rounded-lg cursor-pointer flex-shrink-0 w-[200px]"
                 key={band.band}
                 href={`/artist/${band.artist?.idArtist}`}
               >
@@ -70,7 +72,7 @@ export default async function HomePageSliders({
             ))
           : albumsData.map((album) => (
               <Link
-                className="mt-4 hover:bg-[#1f1f1f] transition duration-300 p-3 rounded-lg cursor-pointer flex-shrink-0"
+                className="mt-4 hover:bg-[#1f1f1f] transition duration-300 p-3 rounded-lg cursor-pointer flex-shrink-0 w-[200px]"
                 key={album?.album[0]?.idAlbum}
                 href={`/albums/${album?.album[0]?.idAlbum}`}
               >
